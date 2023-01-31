@@ -95,7 +95,7 @@
 }
 
 .heroSubtitle {
-  max-width: 620px;
+  max-width: 640px;
   margin: 0 0 40px;
   color: hsla(0, 0%, 100%, 0.4);
   font-size: Min(3.8vw, 20px);

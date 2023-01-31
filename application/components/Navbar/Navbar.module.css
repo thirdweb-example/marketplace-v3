@@ -62,24 +62,22 @@
   flex-direction: row;
   gap: 16px;
   align-items: center;
+  justify-content: center;
+}
+
+.profileImage {
+  margin-top: 6px;
+  transition: all 0.15s ease-in-out;
+}
+
+.profileImage:hover {
+  cursor: pointer;
+  opacity: 0.8;
 }
 
 .homeLink {
   font-size: 24px;
   font-weight: 500;
-}
-
-.connectWalletContainer {
-  max-width: 350px;
-}
-
-.buttonLink {
-  padding: 12px 24px;
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 400;
-  transition: box-shadow 300ms ease;
 }
 
 .buttonLink:hover {

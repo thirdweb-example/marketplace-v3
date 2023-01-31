@@ -1,14 +1,12 @@
 import type { AppProps } from "next/app";
-import { ChainId, ThirdwebProvider } from "@thirdweb-dev/react";
+import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { Navbar } from "../components/Navbar/Navbar";
+import { NETWORK_ID } from "../const/contractAddresses";
 import "../styles/globals.css";
-
-// This is the chainId your dApp will work on.
-const activeChainId = ChainId.Mainnet;
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
-    <ThirdwebProvider desiredChainId={activeChainId}>
+    <ThirdwebProvider desiredChainId={NETWORK_ID}>
       {/* Render the navigation menu above each component */}
       <Navbar />
       {/* Render the actual component (page) */}
