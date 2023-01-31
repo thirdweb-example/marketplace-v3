@@ -2,13 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
-}
-
-a {
-  color: #7dd3fc;
-  text-decoration: none;
+  font-family: Inter, Helvetica, Arial, sans-serif;
 }
 
 * {
@@ -18,7 +12,53 @@ a {
 html {
   color-scheme: dark;
 }
+
 body {
-  color: #e7e8e8;
-  background: #0f1318;
+  color: #ffffff;
+  background: #191c1f;
+  --color-primary: #fada3f;
+  --color-secondary: #ff2136;
+  --color-tertiary: #0294fe;
+  --color-quaternary: #9b4dff;
+  --card-background: #252133;
+  --highlighted-background: #202326;
+  font-weight: 400;
+}
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+p {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-color: rgb(255, 255, 255);
+  color: rgb(25, 28, 31) !important;
+  background: rgb(255, 255, 255) !important;
+  height: 40px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  padding: 6px 16px;
+  font-weight: 600;
+  font-family: inherit;
+  transition: all 0.15s ease-in-out 0s;
+}
+
+button:hover {
+  cursor: pointer;
+  background: rgb(255, 255, 255);
+  border-color: rgb(255, 255, 255);
+  color: rgb(25, 28, 31);
 }
