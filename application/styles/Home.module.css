@@ -86,11 +86,12 @@
   letter-spacing: 1.2px;
   text-align: center;
   overflow: visible;
+  letter-spacing: -0.05em;
 }
 
 .heroTitleGradient {
   padding-right: 12px;
-  font-weight: 800;
+  font-weight: 700;
 }
 
 .heroSubtitle {
@@ -328,7 +329,7 @@
   }
 
   .heroAsset {
-    max-height: 300px;
+    max-height: 270px;
   }
 }
 
