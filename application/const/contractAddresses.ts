@@ -1,3 +1,5 @@
+import { ChainId } from "@thirdweb-dev/sdk";
+
 /**
  * TODO: Replace these values with your contract addresses and ABI.
  * 1. NETWORK_ID: This is the network ID of the network your smart contracts are deployed to.
@@ -8,17 +10,15 @@
  *  Or from the "contract" tab on EtherScan.
  */
 
-import { ChainId } from "@thirdweb-dev/sdk";
-
-// 1.
-export const NETWORK_ID = ChainId.OptimismGoerli;
+// 1. Set up the network ID of the network your smart contracts are deployed to.
+export const NETWORK_ID = ChainId.Mumbai;
 
 // 2. The address of the marketplace smart contract.
-export const MARKETPLACE_ADDRESS = "0x39213D62de2365A93AE409903f08ef169a648bF0";
+export const MARKETPLACE_ADDRESS = "0x6604bd9D7770035f26B4ACeab2C746fdCE166473";
 
 // 3. The address of your NFT collection smart contract.
 export const NFT_COLLECTION_ADDRESS =
-  "0x34eb053e036fed1b567e5DE4190f82D385a089cC";
+  "0xfC663884dd27660D53CAF1B37D4Ddd519357EC5D";
 
 // 4. The ABI of your NFT collection smart contract.
 export const NFT_COLLECTION_ABI = [

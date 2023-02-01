@@ -1,0 +1,29 @@
+.nftGridContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 1%;
+}
+
+.nftContainer {
+  width: 17.8%;
+  margin: 8px;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  border-radius: 8px;
+  backface-visibility: hidden;
+  outline: 1px solid rgba(255, 255, 255, 0.1);
+  transform: translate3d(0px, 0px, 0px);
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  min-height: 312px;
+  max-height: 382px;
+}
+
+.title {
+  padding: 8px;
+  font-size: 3rem;
+  margin-bottom: 8px;
+}

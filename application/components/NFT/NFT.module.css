@@ -1,0 +1,42 @@
+.nftImage {
+  width: 100%;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  object-fit: cover;
+}
+
+.nftTokenId {
+  font-size: 12px;
+  margin: 0px;
+  margin-top: 12px;
+}
+
+.nftName {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  max-width: 100%;
+  color: #fff;
+  font-family: inherit;
+  vertical-align: inherit;
+  font-size: 15px;
+  line-height: 22px;
+  font-weight: 700;
+  margin: 0px;
+  margin-bottom: 12px;
+  margin-top: 4px;
+}
+
+.priceContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  min-height: 52px;
+}
+
+.nftPrice {
+  margin-left: 8px;
+}
