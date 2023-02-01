@@ -27,3 +27,27 @@
   font-size: 3rem;
   margin-bottom: 8px;
 }
+
+/* Responsive */
+
+@media (min-width: 1200px) {
+}
+
+@media (min-width: 760px) and (max-width: 1200px) {
+  .nftContainer {
+    width: 22%;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 760px) {
+  .nftContainer {
+    width: 29%;
+  }
+}
+
+/* Less than 600 */
+@media (max-width: 600px) {
+  .nftContainer {
+    width: 45%;
+  }
+}
