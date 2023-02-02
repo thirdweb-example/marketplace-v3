@@ -30,6 +30,96 @@ export const NFT_COLLECTION_ABI = [
     stateMutability: "nonpayable",
   },
   {
+    type: "error",
+    name: "ApprovalCallerNotOwnerNorApproved",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "ApprovalQueryForNonexistentToken",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "ApprovalToCurrentOwner",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "ApproveToCaller",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "BalanceQueryForZeroAddress",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "MintToZeroAddress",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "MintZeroQuantity",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "OperatorNotAllowed",
+    inputs: [
+      {
+        type: "address",
+        name: "operator",
+        internalType: "address",
+      },
+    ],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "OwnerQueryForNonexistentToken",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "TransferCallerNotOwnerNorApproved",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "TransferFromIncorrectOwner",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "TransferToNonERC721ReceiverImplementer",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "TransferToZeroAddress",
+    inputs: [],
+    outputs: [],
+  },
+  {
+    type: "error",
+    name: "URIQueryForNonexistentToken",
+    inputs: [],
+    outputs: [],
+  },
+  {
     type: "event",
     name: "Approval",
     inputs: [
@@ -106,12 +196,7 @@ export const NFT_COLLECTION_ABI = [
           },
           {
             type: "uint256",
-            name: "quantityLimitPerTransaction",
-            internalType: "uint256",
-          },
-          {
-            type: "uint256",
-            name: "waitTimeInSecondsBetweenClaims",
+            name: "quantityLimitPerWallet",
             internalType: "uint256",
           },
           {
@@ -129,9 +214,40 @@ export const NFT_COLLECTION_ABI = [
             name: "currency",
             internalType: "address",
           },
+          {
+            type: "string",
+            name: "metadata",
+            internalType: "string",
+          },
         ],
         indexed: false,
-        internalType: "struct IDropClaimCondition.ClaimCondition[]",
+        internalType: "struct IClaimCondition.ClaimCondition[]",
+      },
+      {
+        type: "bool",
+        name: "resetEligibility",
+        indexed: false,
+        internalType: "bool",
+      },
+    ],
+    outputs: [],
+    anonymous: false,
+  },
+  {
+    type: "event",
+    name: "ContractURIUpdated",
+    inputs: [
+      {
+        type: "string",
+        name: "prevURI",
+        indexed: false,
+        internalType: "string",
+      },
+      {
+        type: "string",
+        name: "newURI",
+        indexed: false,
+        internalType: "string",
       },
     ],
     outputs: [],
@@ -187,33 +303,13 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "event",
-    name: "MaxWalletClaimCountUpdated",
+    name: "OperatorRestriction",
     inputs: [
       {
-        type: "uint256",
-        name: "count",
+        type: "bool",
+        name: "restriction",
         indexed: false,
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    anonymous: false,
-  },
-  {
-    type: "event",
-    name: "NFTRevealed",
-    inputs: [
-      {
-        type: "uint256",
-        name: "endTokenId",
-        indexed: false,
-        internalType: "uint256",
-      },
-      {
-        type: "string",
-        name: "revealedURI",
-        indexed: false,
-        internalType: "string",
+        internalType: "bool",
       },
     ],
     outputs: [],
@@ -379,6 +475,26 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "event",
+    name: "TokenURIRevealed",
+    inputs: [
+      {
+        type: "uint256",
+        name: "index",
+        indexed: true,
+        internalType: "uint256",
+      },
+      {
+        type: "string",
+        name: "revealedURI",
+        indexed: false,
+        internalType: "string",
+      },
+    ],
+    outputs: [],
+    anonymous: false,
+  },
+  {
+    type: "event",
     name: "TokensClaimed",
     inputs: [
       {
@@ -422,7 +538,7 @@ export const NFT_COLLECTION_ABI = [
       {
         type: "uint256",
         name: "startTokenId",
-        indexed: false,
+        indexed: true,
         internalType: "uint256",
       },
       {
@@ -474,26 +590,6 @@ export const NFT_COLLECTION_ABI = [
     anonymous: false,
   },
   {
-    type: "event",
-    name: "WalletClaimCountUpdated",
-    inputs: [
-      {
-        type: "address",
-        name: "wallet",
-        indexed: true,
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "count",
-        indexed: false,
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    anonymous: false,
-  },
-  {
     type: "function",
     name: "DEFAULT_ADMIN_ROLE",
     inputs: [],
@@ -512,7 +608,7 @@ export const NFT_COLLECTION_ABI = [
     inputs: [
       {
         type: "address",
-        name: "to",
+        name: "operator",
         internalType: "address",
       },
       {
@@ -532,25 +628,6 @@ export const NFT_COLLECTION_ABI = [
         type: "address",
         name: "owner",
         internalType: "address",
-      },
-    ],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "baseURIIndices",
-    inputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
       },
     ],
     outputs: [
@@ -600,14 +677,36 @@ export const NFT_COLLECTION_ABI = [
         internalType: "uint256",
       },
       {
-        type: "bytes32[]",
-        name: "_proofs",
-        internalType: "bytes32[]",
+        type: "tuple",
+        name: "_allowlistProof",
+        components: [
+          {
+            type: "bytes32[]",
+            name: "proof",
+            internalType: "bytes32[]",
+          },
+          {
+            type: "uint256",
+            name: "quantityLimitPerWallet",
+            internalType: "uint256",
+          },
+          {
+            type: "uint256",
+            name: "pricePerToken",
+            internalType: "uint256",
+          },
+          {
+            type: "address",
+            name: "currency",
+            internalType: "address",
+          },
+        ],
+        internalType: "struct IDrop.AllowlistProof",
       },
       {
-        type: "uint256",
-        name: "_proofMaxQuantityPerTransaction",
-        internalType: "uint256",
+        type: "bytes",
+        name: "_data",
+        internalType: "bytes",
       },
     ],
     outputs: [],
@@ -760,6 +859,25 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
+    name: "getBatchIdAtIndex",
+    inputs: [
+      {
+        type: "uint256",
+        name: "_index",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        type: "uint256",
+        name: "",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "getClaimConditionById",
     inputs: [
       {
@@ -790,12 +908,7 @@ export const NFT_COLLECTION_ABI = [
           },
           {
             type: "uint256",
-            name: "quantityLimitPerTransaction",
-            internalType: "uint256",
-          },
-          {
-            type: "uint256",
-            name: "waitTimeInSecondsBetweenClaims",
+            name: "quantityLimitPerWallet",
             internalType: "uint256",
           },
           {
@@ -813,37 +926,13 @@ export const NFT_COLLECTION_ABI = [
             name: "currency",
             internalType: "address",
           },
+          {
+            type: "string",
+            name: "metadata",
+            internalType: "string",
+          },
         ],
-        internalType: "struct IDropClaimCondition.ClaimCondition",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "getClaimTimestamp",
-    inputs: [
-      {
-        type: "uint256",
-        name: "_conditionId",
-        internalType: "uint256",
-      },
-      {
-        type: "address",
-        name: "_claimer",
-        internalType: "address",
-      },
-    ],
-    outputs: [
-      {
-        type: "uint256",
-        name: "lastClaimTimestamp",
-        internalType: "uint256",
-      },
-      {
-        type: "uint256",
-        name: "nextValidClaimTimestamp",
-        internalType: "uint256",
+        internalType: "struct IClaimCondition.ClaimCondition",
       },
     ],
     stateMutability: "view",
@@ -886,6 +975,30 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
+    name: "getRevealURI",
+    inputs: [
+      {
+        type: "uint256",
+        name: "_batchId",
+        internalType: "uint256",
+      },
+      {
+        type: "bytes",
+        name: "_key",
+        internalType: "bytes",
+      },
+    ],
+    outputs: [
+      {
+        type: "string",
+        name: "revealedURI",
+        internalType: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "getRoleAdmin",
     inputs: [
       {
@@ -921,7 +1034,7 @@ export const NFT_COLLECTION_ABI = [
     outputs: [
       {
         type: "address",
-        name: "",
+        name: "member",
         internalType: "address",
       },
     ],
@@ -940,7 +1053,7 @@ export const NFT_COLLECTION_ABI = [
     outputs: [
       {
         type: "uint256",
-        name: "",
+        name: "count",
         internalType: "uint256",
       },
     ],
@@ -972,6 +1085,30 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
+    name: "getSupplyClaimedByWallet",
+    inputs: [
+      {
+        type: "uint256",
+        name: "_conditionId",
+        internalType: "uint256",
+      },
+      {
+        type: "address",
+        name: "_claimer",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        type: "uint256",
+        name: "supplyClaimedByWallet",
+        internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "grantRole",
     inputs: [
       {
@@ -991,6 +1128,30 @@ export const NFT_COLLECTION_ABI = [
   {
     type: "function",
     name: "hasRole",
+    inputs: [
+      {
+        type: "bytes32",
+        name: "role",
+        internalType: "bytes32",
+      },
+      {
+        type: "address",
+        name: "account",
+        internalType: "address",
+      },
+    ],
+    outputs: [
+      {
+        type: "bool",
+        name: "",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "hasRoleWithSwitch",
     inputs: [
       {
         type: "bytes32",
@@ -1096,6 +1257,25 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
+    name: "isEncryptedBatch",
+    inputs: [
+      {
+        type: "uint256",
+        name: "_batchId",
+        internalType: "uint256",
+      },
+    ],
+    outputs: [
+      {
+        type: "bool",
+        name: "",
+        internalType: "bool",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
     name: "isTrustedForwarder",
     inputs: [
       {
@@ -1133,25 +1313,18 @@ export const NFT_COLLECTION_ABI = [
         internalType: "bytes",
       },
     ],
-    outputs: [],
+    outputs: [
+      {
+        type: "uint256",
+        name: "batchId",
+        internalType: "uint256",
+      },
+    ],
     stateMutability: "nonpayable",
   },
   {
     type: "function",
     name: "maxTotalSupply",
-    inputs: [],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "maxWalletClaimCount",
     inputs: [],
     outputs: [
       {
@@ -1216,6 +1389,19 @@ export const NFT_COLLECTION_ABI = [
         type: "uint256",
         name: "",
         internalType: "uint256",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "operatorRestriction",
+    inputs: [],
+    outputs: [
+      {
+        type: "bool",
+        name: "",
+        internalType: "bool",
       },
     ],
     stateMutability: "view",
@@ -1289,7 +1475,7 @@ export const NFT_COLLECTION_ABI = [
     inputs: [
       {
         type: "uint256",
-        name: "index",
+        name: "_index",
         internalType: "uint256",
       },
       {
@@ -1429,7 +1615,7 @@ export const NFT_COLLECTION_ABI = [
     inputs: [
       {
         type: "tuple[]",
-        name: "_phases",
+        name: "_conditions",
         components: [
           {
             type: "uint256",
@@ -1448,12 +1634,7 @@ export const NFT_COLLECTION_ABI = [
           },
           {
             type: "uint256",
-            name: "quantityLimitPerTransaction",
-            internalType: "uint256",
-          },
-          {
-            type: "uint256",
-            name: "waitTimeInSecondsBetweenClaims",
+            name: "quantityLimitPerWallet",
             internalType: "uint256",
           },
           {
@@ -1471,8 +1652,13 @@ export const NFT_COLLECTION_ABI = [
             name: "currency",
             internalType: "address",
           },
+          {
+            type: "string",
+            name: "metadata",
+            internalType: "string",
+          },
         ],
-        internalType: "struct IDropClaimCondition.ClaimCondition[]",
+        internalType: "struct IClaimCondition.ClaimCondition[]",
       },
       {
         type: "bool",
@@ -1529,12 +1715,12 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
-    name: "setMaxWalletClaimCount",
+    name: "setOperatorRestriction",
     inputs: [
       {
-        type: "uint256",
-        name: "_count",
-        internalType: "uint256",
+        type: "bool",
+        name: "_restriction",
+        internalType: "bool",
       },
     ],
     outputs: [],
@@ -1609,24 +1795,6 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
-    name: "setWalletClaimCount",
-    inputs: [
-      {
-        type: "address",
-        name: "_claimer",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "_count",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [],
-    stateMutability: "nonpayable",
-  },
-  {
-    type: "function",
     name: "supportsInterface",
     inputs: [
       {
@@ -1659,49 +1827,6 @@ export const NFT_COLLECTION_ABI = [
   },
   {
     type: "function",
-    name: "tokenByIndex",
-    inputs: [
-      {
-        type: "uint256",
-        name: "index",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "tokenOfOwnerByIndex",
-    inputs: [
-      {
-        type: "address",
-        name: "owner",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "index",
-        internalType: "uint256",
-      },
-    ],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
     name: "tokenURI",
     inputs: [
       {
@@ -1715,6 +1840,19 @@ export const NFT_COLLECTION_ABI = [
         type: "string",
         name: "",
         internalType: "string",
+      },
+    ],
+    stateMutability: "view",
+  },
+  {
+    type: "function",
+    name: "totalMinted",
+    inputs: [],
+    outputs: [
+      {
+        type: "uint256",
+        name: "",
+        internalType: "uint256",
       },
     ],
     stateMutability: "view",
@@ -1785,73 +1923,38 @@ export const NFT_COLLECTION_ABI = [
         internalType: "uint256",
       },
       {
-        type: "bool",
-        name: "verifyMaxQuantityPerTransaction",
-        internalType: "bool",
-      },
-    ],
-    outputs: [],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "verifyClaimMerkleProof",
-    inputs: [
-      {
-        type: "uint256",
-        name: "_conditionId",
-        internalType: "uint256",
-      },
-      {
-        type: "address",
-        name: "_claimer",
-        internalType: "address",
-      },
-      {
-        type: "uint256",
-        name: "_quantity",
-        internalType: "uint256",
-      },
-      {
-        type: "bytes32[]",
-        name: "_proofs",
-        internalType: "bytes32[]",
-      },
-      {
-        type: "uint256",
-        name: "_proofMaxQuantityPerTransaction",
-        internalType: "uint256",
+        type: "tuple",
+        name: "_allowlistProof",
+        components: [
+          {
+            type: "bytes32[]",
+            name: "proof",
+            internalType: "bytes32[]",
+          },
+          {
+            type: "uint256",
+            name: "quantityLimitPerWallet",
+            internalType: "uint256",
+          },
+          {
+            type: "uint256",
+            name: "pricePerToken",
+            internalType: "uint256",
+          },
+          {
+            type: "address",
+            name: "currency",
+            internalType: "address",
+          },
+        ],
+        internalType: "struct IDrop.AllowlistProof",
       },
     ],
     outputs: [
       {
         type: "bool",
-        name: "validMerkleProof",
+        name: "isOverride",
         internalType: "bool",
-      },
-      {
-        type: "uint256",
-        name: "merkleProofIndex",
-        internalType: "uint256",
-      },
-    ],
-    stateMutability: "view",
-  },
-  {
-    type: "function",
-    name: "walletClaimCount",
-    inputs: [
-      {
-        type: "address",
-        name: "",
-        internalType: "address",
-      },
-    ],
-    outputs: [
-      {
-        type: "uint256",
-        name: "",
-        internalType: "uint256",
       },
     ],
     stateMutability: "view",

@@ -31,6 +31,13 @@ h1 {
   line-height: 1.5;
 }
 
+h3 {
+  font-size: 22px;
+  line-height: 28px;
+  font-weight: 700;
+  margin-bottom: 0px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
