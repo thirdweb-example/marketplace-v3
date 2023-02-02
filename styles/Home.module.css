@@ -37,7 +37,7 @@
 
 .heroBackgroundInner {
   position: absolute;
-  top: -238px;
+  top: -352px;
   left: 50%;
   width: clamp(1000px, calc(59.6vw + 776px), 1540px);
   aspect-ratio: 1/1;
