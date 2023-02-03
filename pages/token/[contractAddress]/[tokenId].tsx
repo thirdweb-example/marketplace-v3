@@ -12,6 +12,7 @@ import Container from "../../../components/Container/Container";
 import { GetStaticProps, GetStaticPaths } from "next";
 import { CHAIN_ID_TO_NAME, NFT, ThirdwebSDK } from "@thirdweb-dev/sdk";
 import {
+  ETHERSCAN_URL,
   MARKETPLACE_ADDRESS,
   NETWORK_ID,
   NFT_COLLECTION_ABI,
@@ -54,17 +55,18 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
       tokenId: nft.metadata.id,
     });
 
-  // Load historical transfer events
+  // Load historical transfer events: TODO - more event types like sale
   const { data: transferEvents, isLoading: loadingTransferEvents } =
     useContractEvents(nftCollection, "Transfer", {
       queryFilter: {
         filters: {
           tokenId: nft.metadata.id,
         },
+        order: "desc",
       },
     });
 
-  console.log("transferEvents", transferEvents);
+  console.log(transferEvents);
 
   return (
     <Container maxWidth="lg">
@@ -75,6 +77,70 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
           <div className={styles.descriptionContainer}>
             <h3 className={styles.descriptionTitle}>Description</h3>
             <p className={styles.description}>{nft.metadata.description}</p>
+
+            <h3 className={styles.descriptionTitle}>Traits</h3>
+
+            <div className={styles.traitsContainer}>
+              {Object.entries(nft?.metadata?.attributes || {}).map(
+                ([key, value]) => (
+                  <div className={styles.traitContainer} key={key}>
+                    <p className={styles.traitName}>{key}</p>
+                    <p className={styles.traitValue}>
+                      {value?.toString() || ""}
+                    </p>
+                  </div>
+                )
+              )}
+            </div>
+
+            <h3 className={styles.descriptionTitle}>History</h3>
+
+            <div className={styles.traitsContainer}>
+              {transferEvents?.map((event, index) => (
+                <div
+                  key={event.transaction.transactionHash}
+                  className={styles.eventsContainer}
+                >
+                  <div className={styles.eventContainer}>
+                    <p className={styles.traitName}>Event</p>
+                    <p className={styles.traitValue}>
+                      {
+                        // if last event in array, then it's a mint
+                        index === transferEvents.length - 1
+                          ? "Mint"
+                          : "Transfer"
+                      }
+                    </p>
+                  </div>
+
+                  <div className={styles.eventContainer}>
+                    <p className={styles.traitName}>From</p>
+                    <p className={styles.traitValue}>
+                      {event.data.from?.slice(0, 4)}...
+                      {event.data.from?.slice(-2)}
+                    </p>
+                  </div>
+
+                  <div className={styles.eventContainer}>
+                    <p className={styles.traitName}>To</p>
+                    <p className={styles.traitValue}>
+                      {event.data.to?.slice(0, 4)}...
+                      {event.data.to?.slice(-2)}
+                    </p>
+                  </div>
+
+                  <div className={styles.eventContainer}>
+                    <Link
+                      className={styles.txHashArrow}
+                      href={`${ETHERSCAN_URL}/tx/${event.transaction.transactionHash}`}
+                      target="_blank"
+                    >
+                      ↗
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 

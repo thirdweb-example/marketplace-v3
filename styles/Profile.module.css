@@ -57,7 +57,7 @@
 }
 
 .activeTabContent {
-  display: block;
-  height: auto;
+  display: flex;
+  flex-direction: row;
   opacity: 1;
 }

@@ -35,8 +35,6 @@ export default function Sell() {
       ) : (
         <div className={tokenPageStyles.container} style={{ marginTop: 0 }}>
           <div className={tokenPageStyles.metadataContainer}>
-            {/* TODO: Add cross to remove selectedNft */}
-            {/* Cross button in top right of image to remove */}
             <div className={tokenPageStyles.imageContainer}>
               <ThirdwebNftMedia
                 metadata={selectedNft.metadata}

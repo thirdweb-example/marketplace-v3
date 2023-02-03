@@ -46,15 +46,13 @@ export default function ProfilePage() {
     router.query.address as string
   );
 
-  const { data: directListings, isLoading: loadingDirectListings } =
-    useValidDirectListings(marketplace, {
-      seller: router.query.address as string,
-    });
+  const { data: directListings } = useValidDirectListings(marketplace, {
+    seller: router.query.address as string,
+  });
 
-  const { data: auctionListings, isLoading: loadingAuctionListings } =
-    useValidEnglishAuctions(marketplace, {
-      seller: router.query.address as string,
-    });
+  const { data: auctionListings } = useValidEnglishAuctions(marketplace, {
+    seller: router.query.address as string,
+  });
 
   return (
     <Container maxWidth="lg">

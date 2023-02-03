@@ -23,6 +23,7 @@
   min-width: 370px;
   max-width: 450px;
   margin-top: 16px;
+  margin-right: 16px;
 }
 
 .image {
@@ -64,6 +65,8 @@
   height: 32px;
   border-radius: 8px;
   margin-right: 8px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .collectionName {
@@ -72,6 +75,8 @@
   overflow: hidden;
   max-width: 100%;
   margin: 0px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .title {
@@ -80,6 +85,8 @@
   hyphens: auto;
   overflow-wrap: break-word;
   margin-bottom: 4px;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .nftOwnerContainer {
@@ -90,6 +97,8 @@
   margin-top: 24px;
   gap: 8px;
   transition: opacity 0.2s ease-in-out;
+  margin-left: 16px;
+  margin-right: 16px;
 }
 
 .nftOwnerContainer:hover {
@@ -133,7 +142,71 @@
   padding-right: 16px;
 }
 
+.descriptionTitle {
+  margin-top: 32px;
+}
+
+.traitsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.traitContainer {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  min-width: 128px;
+  border-radius: 16px;
+  min-height: 32px;
+}
+
+.eventsContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+  gap: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 8px 12px;
+  min-width: 128px;
+  border-radius: 16px;
+  min-height: 32px;
+}
+
+.traitValue {
+  font-weight: 600;
+  margin: 0px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.traitName {
+  font-weight: 400;
+  margin: 0px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.eventContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.txHashArrow {
+  width: 24px;
+  height: 24px;
+  padding: 8px;
+}
+
 .pricingContainer {
+  display: flex;
+  flex-direction: column;
   width: 100%;
   position: relative;
   -webkit-box-flex: 1;

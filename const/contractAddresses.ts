@@ -10,6 +10,10 @@ import { ChainId } from "@thirdweb-dev/sdk";
  *  Or from the "contract" tab on EtherScan.
  */
 
+// 0. Set up the root URL of where users can view transactions on
+// For example, below, we use Mumbai scan to view transactions on the Mumbai testnet.
+export const ETHERSCAN_URL = "https://mumbai.polygonscan.com";
+
 // 1. Set up the network ID of the network your smart contracts are deployed to.
 export const NETWORK_ID = ChainId.Mumbai;
 
@@ -18,7 +22,7 @@ export const MARKETPLACE_ADDRESS = "0x6604bd9D7770035f26B4ACeab2C746fdCE166473";
 
 // 3. The address of your NFT collection smart contract.
 export const NFT_COLLECTION_ADDRESS =
-  "0xfC663884dd27660D53CAF1B37D4Ddd519357EC5D";
+  "0xFfd9bAddF3f6e427EfAa1A4AEC99131078C1d683";
 
 // 4. The ABI of your NFT collection smart contract.
 export const NFT_COLLECTION_ABI = [

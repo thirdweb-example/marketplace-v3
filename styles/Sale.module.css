@@ -27,3 +27,9 @@
   margin-top: 24px;
   margin-bottom: 8px;
 }
+
+.activeTabContent {
+  display: flex;
+  flex-direction: column;
+  opacity: 1;
+}
