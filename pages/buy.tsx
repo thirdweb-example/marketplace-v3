@@ -6,7 +6,6 @@ import {
   NFT_COLLECTION_ABI,
   NFT_COLLECTION_ADDRESS,
 } from "../const/contractAddresses";
-import styles from "../styles/Buy.module.css";
 
 export default function Buy() {
   // Load all of the NFTs from the NFT Collection

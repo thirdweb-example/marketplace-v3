@@ -50,14 +50,14 @@
 }
 
 .tabContent {
-  visibility: hidden;
+  display: none;
   height: 0px;
   opacity: 0;
   transition: all 0.1s linear;
 }
 
 .activeTabContent {
-  visibility: visible;
+  display: block;
   height: auto;
   opacity: 1;
 }

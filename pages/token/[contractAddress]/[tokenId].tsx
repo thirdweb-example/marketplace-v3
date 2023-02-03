@@ -19,11 +19,14 @@ import {
 } from "../../../const/contractAddresses";
 import styles from "../../../styles/Token.module.css";
 import Link from "next/link";
+import randomColor from "../../../util/randomColor";
 
 type Props = {
   nft: NFT;
   contractMetadata: any;
 };
+
+const [randomColor1, randomColor2] = [randomColor(), randomColor()];
 
 export default function TokenPage({ nft, contractMetadata }: Props) {
   // Connect to marketplace smart contract
@@ -91,7 +94,12 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             className={styles.nftOwnerContainer}
           >
             {/* Random linear gradient circle shape */}
-            <div className={styles.nftOwnerImage} />
+            <div
+              className={styles.nftOwnerImage}
+              style={{
+                background: `linear-gradient(90deg, ${randomColor1}, ${randomColor2})`,
+              }}
+            />
             <div className={styles.nftOwnerInfo}>
               <p className={styles.label}>Current Owner</p>
               <p className={styles.nftOwnerAddress}>

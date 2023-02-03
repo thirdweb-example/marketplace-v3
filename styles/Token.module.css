@@ -3,6 +3,7 @@
   display: flex;
   flex-direction: row;
   gap: 32px;
+  margin-top: 128px;
 }
 
 .metadataContainer {
@@ -21,7 +22,7 @@
   width: 100%;
   min-width: 370px;
   max-width: 450px;
-  top: 96px;
+  margin-top: 16px;
 }
 
 .image {
@@ -101,11 +102,7 @@
   width: 48px;
   height: 48px;
   border-radius: 50%;
-  background: linear-gradient(
-    134deg,
-    var(--color-tertiary),
-    var(--color-quaternary)
-  );
+
   opacity: 0.9;
   border: 2px solid rgba(255, 255, 255, 0.2);
 }
@@ -174,7 +171,7 @@
   opacity: 0.8 !important;
 }
 
-@media (max-width: 760px) {
+@media (max-width: 960px) {
   .container {
     flex-direction: column;
     padding-bottom: 128px;
