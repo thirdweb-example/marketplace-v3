@@ -15,8 +15,8 @@ import {
   NFT_COLLECTION_ABI,
   NFT_COLLECTION_ADDRESS,
 } from "../../const/contractAddresses";
-import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
+import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../util/toastConfig";
 
 type Props = {
@@ -203,6 +203,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="number"
+            step={0.000001}
             {...registerDirect("price")}
           />
 
@@ -269,6 +270,7 @@ export default function SaleInfo({ nft }: Props) {
           <legend className={styles.legend}> Allow bids starting from </legend>
           <input
             className={styles.input}
+            step={0.000001}
             type="number"
             {...registerAuction("floorPrice")}
           />
@@ -278,6 +280,7 @@ export default function SaleInfo({ nft }: Props) {
           <input
             className={styles.input}
             type="number"
+            step={0.000001}
             {...registerAuction("buyoutPrice")}
           />
 

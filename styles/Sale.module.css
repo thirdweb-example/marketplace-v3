@@ -12,7 +12,7 @@
 
 .input {
   display: block;
-  width: 100%;
+  width: 98%;
   padding: 12px 16px;
   margin-bottom: 0.5rem;
   background: transparent;
@@ -21,6 +21,7 @@
   box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
   border-radius: 8px;
   margin-bottom: 16px;
+  margin-left: 2px;
 }
 
 .formSectionTitle {
