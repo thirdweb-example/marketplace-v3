@@ -20,6 +20,13 @@
   padding: 8px;
   min-height: 312px;
   max-height: 382px;
+  transition: all 0.25s ease-in-out;
+}
+
+.nftContainer:hover {
+  cursor: pointer;
+  transform: translate3d(0px, -4px, 0px);
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .title {

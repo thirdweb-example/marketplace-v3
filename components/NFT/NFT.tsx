@@ -1,7 +1,6 @@
 import {
   ThirdwebNftMedia,
   useContract,
-  useContractEvents,
   useValidDirectListings,
   useValidEnglishAuctions,
 } from "@thirdweb-dev/react";
@@ -9,7 +8,6 @@ import { NFT } from "@thirdweb-dev/sdk";
 import React from "react";
 import {
   MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ABI,
   NFT_COLLECTION_ADDRESS,
 } from "../../const/contractAddresses";
 import Skeleton from "../Skeleton/Skeleton";

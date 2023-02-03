@@ -37,6 +37,27 @@
   margin-bottom: 8px;
 }
 
+.imageContainer {
+  position: relative;
+}
+
+.image {
+  display: block;
+  width: 100%;
+}
+
+.crossButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.crossButton:hover {
+  cursor: pointer;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+}
+
 .collectionImage {
   width: 32px;
   height: 32px;
@@ -151,4 +172,23 @@
 .buyButton:hover {
   cursor: pointer;
   opacity: 0.8 !important;
+}
+
+@media (max-width: 760px) {
+  .container {
+    flex-direction: column;
+    padding-bottom: 128px;
+  }
+
+  .listingContainer {
+    position: relative;
+    width: 100%;
+    min-width: 0px;
+    max-width: 100%;
+    top: 0px;
+  }
+
+  .metadataContainer {
+    margin-top: 32px;
+  }
 }

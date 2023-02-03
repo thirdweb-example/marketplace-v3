@@ -8,6 +8,9 @@
   left: 0px;
   z-index: 3;
   background-color: transparent !important;
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  backdrop-filter: blur(5px);
 }
 
 .nav {

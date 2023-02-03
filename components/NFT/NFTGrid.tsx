@@ -9,11 +9,15 @@ import styles from "../../styles/Buy.module.css";
 type Props = {
   isLoading: boolean;
   data: NFTType[] | undefined;
-  // TODO: Allow button to be passed in (for buy, sell, offer, etc.)
+  overrideOnclickBehavior?: (nft: NFTType) => void;
   // TODO: Allow pagination logic
 };
 
-export default function NFTGrid({ isLoading, data }: Props) {
+export default function NFTGrid({
+  isLoading,
+  data,
+  overrideOnclickBehavior,
+}: Props) {
   return (
     <div className={styles.nftGridContainer}>
       {isLoading
@@ -22,15 +26,25 @@ export default function NFTGrid({ isLoading, data }: Props) {
               <Skeleton key={index} width={"100%"} height="312px" />
             </div>
           ))
-        : data?.map((nft) => (
-            <Link
-              href={`/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
-              key={nft.metadata.id}
-              className={styles.nftContainer}
-            >
-              <NFT nft={nft} />
-            </Link>
-          ))}
+        : data?.map((nft) =>
+            !overrideOnclickBehavior ? (
+              <Link
+                href={`/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
+                key={nft.metadata.id}
+                className={styles.nftContainer}
+              >
+                <NFT nft={nft} />
+              </Link>
+            ) : (
+              <div
+                key={nft.metadata.id}
+                className={styles.nftContainer}
+                onClick={() => overrideOnclickBehavior(nft)}
+              >
+                <NFT nft={nft} />
+              </div>
+            )
+          )}
     </div>
   );
 }

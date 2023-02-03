@@ -58,12 +58,8 @@ const Home: NextPage = () => {
               </p>
 
               <div className={styles.heroCtaContainer}>
-                <Link
-                  className={styles.heroCta}
-                  href="https://portal.thirdweb.com"
-                  target="_blank"
-                >
-                  View Documentation
+                <Link className={styles.heroCta} href="/buy">
+                  Get Started
                 </Link>
                 <Link
                   className={styles.secondaryCta}

@@ -15,7 +15,8 @@ export default function Buy() {
 
   return (
     <Container maxWidth="lg">
-      <h1 className={styles.title}>Buy NFTs</h1>
+      <h1>Buy NFTs</h1>
+      <p>Browse which NFTs are available from the collection.</p>
       <NFTGrid data={data} isLoading={isLoading} />
     </Container>
   );
