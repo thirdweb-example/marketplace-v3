@@ -1,4 +1,9 @@
-import { ThirdwebNftMedia, useContract, useNFTs } from "@thirdweb-dev/react";
+import {
+  ThirdwebNftMedia,
+  useAddress,
+  useContract,
+  useOwnedNFTs,
+} from "@thirdweb-dev/react";
 import React, { useState } from "react";
 import Container from "../components/Container/Container";
 import NFTGrid from "../components/NFT/NFTGrid";
@@ -13,7 +18,8 @@ import SaleInfo from "../components/SaleInfo/SaleInfo";
 export default function Sell() {
   // Load all of the NFTs from the NFT Collection
   const { contract } = useContract(NFT_COLLECTION_ADDRESS, NFT_COLLECTION_ABI);
-  const { data, isLoading } = useNFTs(contract);
+  const address = useAddress();
+  const { data, isLoading } = useOwnedNFTs(contract, address);
 
   const [selectedNft, setSelectedNft] = useState<NFTType>();
 
