@@ -1,5 +1,5 @@
 {
-  "name": "application",
+  "name": "thirdweb-nft-marketplace",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -11,8 +11,9 @@
     "deploy": "next build && next export && npx thirdweb@latest upload out"
   },
   "dependencies": {
-    "@thirdweb-dev/react": "3.8.0-dev-898e400",
-    "@thirdweb-dev/sdk": "3.8.0-dev-898e400",
+    "@thirdweb-dev/chains": "^0.1.2",
+    "@thirdweb-dev/react": "^3.9",
+    "@thirdweb-dev/sdk": "^3.9",
     "ethers": "^5.7.2",
     "next": "^13",
     "nextjs-progressbar": "^0.0.16",

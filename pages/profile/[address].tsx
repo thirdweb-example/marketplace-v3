@@ -1,11 +1,9 @@
 import {
   useContract,
   useOwnedNFTs,
-  useAddress,
   useValidDirectListings,
   useValidEnglishAuctions,
 } from "@thirdweb-dev/react";
-import { NFT } from "@thirdweb-dev/sdk";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Container from "../../components/Container/Container";
@@ -14,7 +12,6 @@ import NFTGrid from "../../components/NFT/NFTGrid";
 import Skeleton from "../../components/Skeleton/Skeleton";
 import {
   MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ABI,
   NFT_COLLECTION_ADDRESS,
 } from "../../const/contractAddresses";
 import styles from "../../styles/Profile.module.css";
@@ -31,10 +28,7 @@ export default function ProfilePage() {
   const router = useRouter();
   const [tab, setTab] = useState<"nfts" | "listings" | "auctions">("nfts");
 
-  const { contract: nftCollection } = useContract(
-    NFT_COLLECTION_ADDRESS,
-    NFT_COLLECTION_ABI
-  );
+  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
 
   const { contract: marketplace } = useContract(
     MARKETPLACE_ADDRESS,
@@ -46,13 +40,15 @@ export default function ProfilePage() {
     router.query.address as string
   );
 
-  const { data: directListings } = useValidDirectListings(marketplace, {
-    seller: router.query.address as string,
-  });
+  const { data: directListings, isLoading: loadingDirects } =
+    useValidDirectListings(marketplace, {
+      seller: router.query.address as string,
+    });
 
-  const { data: auctionListings } = useValidEnglishAuctions(marketplace, {
-    seller: router.query.address as string,
-  });
+  const { data: auctionListings, isLoading: loadingAuctions } =
+    useValidEnglishAuctions(marketplace, {
+      seller: router.query.address as string,
+    });
 
   return (
     <Container maxWidth="lg">
@@ -109,7 +105,11 @@ export default function ProfilePage() {
           tab === "nfts" ? styles.activeTabContent : styles.tabContent
         }`}
       >
-        <NFTGrid data={ownedNfts} isLoading={loadingOwnedNfts} />
+        <NFTGrid
+          data={ownedNfts}
+          isLoading={loadingOwnedNfts}
+          emptyText="Looks like you don't have any NFTs from this collection. Head to the buy page to buy some!"
+        />
       </div>
 
       <div
@@ -117,9 +117,15 @@ export default function ProfilePage() {
           tab === "listings" ? styles.activeTabContent : styles.tabContent
         }`}
       >
-        {directListings?.map((listing) => (
-          <ListingWrapper listing={listing} key={listing.id} />
-        ))}
+        {loadingDirects ? (
+          <p>Loading...</p>
+        ) : directListings && directListings.length === 0 ? (
+          <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
+        ) : (
+          directListings?.map((listing) => (
+            <ListingWrapper listing={listing} key={listing.id} />
+          ))
+        )}
       </div>
 
       <div
@@ -127,9 +133,15 @@ export default function ProfilePage() {
           tab === "auctions" ? styles.activeTabContent : styles.tabContent
         }`}
       >
-        {auctionListings?.map((listing) => (
-          <ListingWrapper listing={listing} key={listing.id} />
-        ))}
+        {loadingAuctions ? (
+          <p>Loading...</p>
+        ) : auctionListings && auctionListings.length === 0 ? (
+          <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
+        ) : (
+          auctionListings?.map((listing) => (
+            <ListingWrapper listing={listing} key={listing.id} />
+          ))
+        )}
       </div>
     </Container>
   );

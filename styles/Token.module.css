@@ -28,7 +28,8 @@
 
 .image {
   border-radius: 16px;
-  width: 100%;
+  width: 100% !important;
+  height: auto !important;
   background-color: rgba(255, 255, 255, 0.04);
 }
 
@@ -57,11 +58,6 @@
   position: relative;
 }
 
-.image {
-  display: block;
-  width: 100%;
-}
-
 .crossButton {
   position: absolute;
   top: 10px;
@@ -75,8 +71,8 @@
 }
 
 .collectionImage {
-  width: 32px;
-  height: 32px;
+  width: 32px !important;
+  height: 32px !important;
   border-radius: 8px;
   margin-right: 8px;
   margin-left: 16px;

@@ -47,6 +47,8 @@
 
 .activeTab {
   color: rgba(255, 255, 255, 1);
+  border-bottom: 2px solid #0294fe;
+  color: #0294fe;
 }
 
 .tabContent {

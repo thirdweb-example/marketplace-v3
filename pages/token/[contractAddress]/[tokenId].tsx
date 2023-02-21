@@ -3,7 +3,6 @@ import {
   ThirdwebNftMedia,
   useContract,
   useContractEvents,
-  useMinimumNextBid,
   useValidDirectListings,
   useValidEnglishAuctions,
   Web3Button,
@@ -15,15 +14,13 @@ import { CHAIN_ID_TO_NAME, NFT, ThirdwebSDK } from "@thirdweb-dev/sdk";
 import {
   ETHERSCAN_URL,
   MARKETPLACE_ADDRESS,
-  NETWORK_ID,
-  NFT_COLLECTION_ABI,
+  NETWORK,
   NFT_COLLECTION_ADDRESS,
 } from "../../../const/contractAddresses";
 import styles from "../../../styles/Token.module.css";
 import Link from "next/link";
 import randomColor from "../../../util/randomColor";
 import Skeleton from "../../../components/Skeleton/Skeleton";
-import formatTimeRemaining from "../../../util/formatTimeRemaining";
 import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../../util/toastConfig";
 
@@ -44,10 +41,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
   );
 
   // Connect to NFT Collection smart contract
-  const { contract: nftCollection } = useContract(
-    NFT_COLLECTION_ADDRESS,
-    NFT_COLLECTION_ABI
-  );
+  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
 
   const { data: directListing, isLoading: loadingDirect } =
     useValidDirectListings(marketplace, {
@@ -95,6 +89,8 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
         tokenId: nft.metadata.id,
         totalPrice: bidValue,
       });
+    } else {
+      throw new Error("No valid listing found for this NFT");
     }
 
     return txResult;
@@ -112,6 +108,8 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
         directListing[0].id,
         1
       );
+    } else {
+      throw new Error("No valid listing found for this NFT");
     }
     return txResult;
   }
@@ -297,7 +295,6 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                     });
                   }}
                   onError={(e) => {
-                    console.error("hey");
                     toast(`Purchase failed! Reason: ${e.message}`, {
                       icon: "❌",
                       style: toastStyle,
@@ -336,6 +333,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                     });
                   }}
                   onError={(e) => {
+                    console.log(e);
                     toast(`Bid failed! Reason: ${e.message}`, {
                       icon: "❌",
                       style: toastStyle,
@@ -357,12 +355,9 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 export const getStaticProps: GetStaticProps = async (context) => {
   const tokenId = context.params?.tokenId as string;
 
-  const sdk = new ThirdwebSDK(CHAIN_ID_TO_NAME[NETWORK_ID]);
+  const sdk = new ThirdwebSDK(CHAIN_ID_TO_NAME[NETWORK.chainId]);
 
-  const contract = await sdk.getContractFromAbi(
-    NFT_COLLECTION_ADDRESS,
-    NFT_COLLECTION_ABI
-  );
+  const contract = await sdk.getContract(NFT_COLLECTION_ADDRESS);
 
   const nft = await contract.erc721.get(tokenId);
 
@@ -377,18 +372,15 @@ export const getStaticProps: GetStaticProps = async (context) => {
       nft,
       contractMetadata: contractMetadata || null,
     },
+    revalidate: 1, // https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
   };
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const sdk = new ThirdwebSDK(CHAIN_ID_TO_NAME[NETWORK_ID]);
+  const sdk = new ThirdwebSDK(CHAIN_ID_TO_NAME[NETWORK.chainId]);
 
-  const contract = await sdk.getContractFromAbi(
-    NFT_COLLECTION_ADDRESS,
-    NFT_COLLECTION_ABI
-  );
+  const contract = await sdk.getContract(NFT_COLLECTION_ADDRESS);
 
-  // TODO: Pagination?
   const nfts = await contract.erc721.getAll();
 
   const paths = nfts.map((nft) => {

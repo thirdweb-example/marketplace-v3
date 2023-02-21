@@ -12,7 +12,6 @@ import {
 } from "@thirdweb-dev/react";
 import {
   MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ABI,
   NFT_COLLECTION_ADDRESS,
 } from "../../const/contractAddresses";
 import { useRouter } from "next/router";
@@ -48,10 +47,10 @@ export default function SaleInfo({ nft }: Props) {
     "marketplace-v3"
   );
 
-  const { contract: nftCollection } = useContract(
-    NFT_COLLECTION_ADDRESS,
-    NFT_COLLECTION_ABI
-  );
+  // useContract is a React hook that returns an object with the contract key.
+  // The value of the contract key is an instance of an NFT_COLLECTION on the blockchain.
+  // This instance is created from the contract address (NFT_COLLECTION_ADDRESS)
+  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
 
   // Hook provides an async function to create a new auction listing
   const { mutateAsync: createAuctionListing } =
@@ -119,7 +118,6 @@ export default function SaleInfo({ nft }: Props) {
     });
 
   async function handleSubmissionAuction(data: AuctionFormData) {
-    console.log(data);
     await checkAndProvideApproval();
     const txResult = await createAuctionListing({
       assetContractAddress: data.nftContractAddress,
@@ -134,7 +132,6 @@ export default function SaleInfo({ nft }: Props) {
   }
 
   async function handleSubmissionDirect(data: DirectFormData) {
-    console.log(data);
     await checkAndProvideApproval();
     const txResult = await createDirectListing({
       assetContractAddress: data.nftContractAddress,
@@ -213,15 +210,13 @@ export default function SaleInfo({ nft }: Props) {
               await handleSubmitDirect(handleSubmissionDirect)();
             }}
             onError={(error) => {
-              console.error(error);
-              toast(`Listed Failed! Reason: ${error.message}`, {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
                 icon: "❌",
                 style: toastStyle,
                 position: "bottom-center",
               });
             }}
             onSuccess={(txResult) => {
-              console.log(txResult);
               toast("Listed Successfully!", {
                 icon: "🥳",
                 style: toastStyle,
@@ -290,15 +285,13 @@ export default function SaleInfo({ nft }: Props) {
               return await handleSubmitAuction(handleSubmissionAuction)();
             }}
             onError={(error) => {
-              console.error(error);
-              toast(`Listed Failed! Reason: ${error.message}`, {
+              toast(`Listed Failed! Reason: ${error.cause}`, {
                 icon: "❌",
                 style: toastStyle,
                 position: "bottom-center",
               });
             }}
             onSuccess={(txResult) => {
-              console.log(txResult);
               toast("Listed Successfully!", {
                 icon: "🥳",
                 style: toastStyle,
