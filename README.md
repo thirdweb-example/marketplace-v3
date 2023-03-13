@@ -48,6 +48,8 @@ _Note: This requires [Node.js and npm](https://docs.npmjs.com/downloading-and-in
 
 In the [contractAddresses.ts](/const/contractAddresses.ts) file, add your contract addresses and chain.
 
+If you haven't already, import your smart contracts into the [thirdweb dashboard](https://thirdweb.com/dashboard).
+
 ```ts
 /** Replace the values below with the addresses of your smart contracts */
 
