@@ -290,3 +290,8 @@
     margin-top: 32px;
   }
 }
+
+.btn {
+  /* fill remainin width */
+  width: 100% !important;
+}
