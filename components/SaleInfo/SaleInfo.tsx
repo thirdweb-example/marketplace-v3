@@ -79,19 +79,17 @@ export default function SaleInfo({ nft }: Props) {
   // User requires to set marketplace approval before listing
   async function checkAndProvideApproval() {
     // Check if approval is required
-    const hasApproval = await nftCollection?.call(
-      "isApprovedForAll",
+    const hasApproval = await nftCollection?.call("isApprovedForAll", [
       nft.owner,
-      MARKETPLACE_ADDRESS
-    );
+      MARKETPLACE_ADDRESS,
+    ]);
 
     // If it is, provide approval
     if (!hasApproval) {
-      const txResult = await nftCollection?.call(
-        "setApprovalForAll",
+      const txResult = await nftCollection?.call("setApprovalForAll", [
         MARKETPLACE_ADDRESS,
-        true
-      );
+        true,
+      ]);
 
       if (txResult) {
         toast.success("Marketplace approval granted", {
