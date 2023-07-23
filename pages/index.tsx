@@ -26,7 +26,7 @@ const Home: NextPage = () => {
           </div>
           <div className={styles.heroAssetFrame}>
             <Image
-              src="/hero-asset.png"
+              src="/DD-NFT.gif"
               width={860}
               height={540}
               alt="Hero asset, NFT marketplace"
@@ -38,21 +38,20 @@ const Home: NextPage = () => {
             <div className={styles.heroBody}>
               <h1 className={styles.heroTitle}>
                 <span className={styles.heroTitleGradient}>
-                  Build NFT Marketplaces
+                  Digital Dividends
                 </span>
                 <br />
-                faster than ever.
+                NFT Marketplace
               </h1>
               <p className={styles.heroSubtitle}>
                 <Link
                   className={styles.link}
-                  href="https://thirdweb.com"
+                  href="https://digital-dividends.net"
                   target="_blank"
                 >
-                  thirdweb
+                  Level up
                 </Link>{" "}
-                gives you the tools you need to create audited, performant, and
-                flexible NFT marketplaces in <b>hours</b>, <i>not months</i>.
+                 your earning potential with  <b> Digital</b> <i>Dividends!</i>.
               </p>
 
               <div className={styles.heroCtaContainer}>
@@ -61,10 +60,10 @@ const Home: NextPage = () => {
                 </Link>
                 <Link
                   className={styles.secondaryCta}
-                  href="https://github.com/thirdweb-example/marketplace-v3"
+                  href="/sell"
                   target="_blank"
                 >
-                  GitHub
+                  My NFTs
                 </Link>
               </div>
             </div>

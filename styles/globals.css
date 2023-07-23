@@ -16,12 +16,12 @@ html {
 body {
   color: #ffffff;
   background: #191c1f;
-  --color-primary: #fada3f;
-  --color-secondary: #ff2136;
-  --color-tertiary: #0294fe;
-  --color-quaternary: #9b4dff;
-  --card-background: #252133;
-  --highlighted-background: #202326;
+  --color-primary: #03ECEB;
+  --color-secondary: #0A0F19;
+  --color-tertiary: #26686f;
+  --color-quaternary: #165245;
+  --card-background: #0A0F19;
+  --highlighted-background: #2e3235;
   font-weight: 400;
 }
 
