@@ -357,7 +357,9 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
 export const getStaticProps: GetStaticProps = async (context) => {
   const tokenId = context.params?.tokenId as string;
 
-  const sdk = new ThirdwebSDK(NETWORK);
+  const sdk = new ThirdwebSDK(NETWORK, {
+    secretKey: process.env.TW_SECRET_KEY,
+  });
 
   const contract = await sdk.getContract(NFT_COLLECTION_ADDRESS);
 
@@ -379,7 +381,9 @@ export const getStaticProps: GetStaticProps = async (context) => {
 };
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  const sdk = new ThirdwebSDK(NETWORK);
+  const sdk = new ThirdwebSDK(NETWORK, {
+    secretKey: process.env.TW_SECRET_KEY,
+  });
 
   const contract = await sdk.getContract(NFT_COLLECTION_ADDRESS);
 
