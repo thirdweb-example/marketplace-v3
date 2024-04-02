@@ -1,21 +1,14 @@
-import {
-  useContract,
-  useOwnedNFTs,
-  useValidDirectListings,
-  useValidEnglishAuctions,
-} from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 import Container from "../../components/Container/Container";
 import ListingWrapper from "../../components/ListingWrapper/ListingWrapper";
 import NFTGrid from "../../components/NFT/NFTGrid";
 import Skeleton from "../../components/Skeleton/Skeleton";
-import {
-  MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-} from "../../const/contractAddresses";
+import { nftCollectionContract } from "../../const/contractAddresses";
 import styles from "../../styles/Profile.module.css";
 import randomColor from "../../util/randomColor";
+import { useReadContract } from "thirdweb/react";
+import { getOwnedNFTs } from "thirdweb/extensions/erc721";
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -28,27 +21,23 @@ export default function ProfilePage() {
   const router = useRouter();
   const [tab, setTab] = useState<"nfts" | "listings" | "auctions">("nfts");
 
-  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
-
-  const { contract: marketplace } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace-v3"
+  const { data: ownedNfts, isLoading: loadingOwnedNfts } = useReadContract(
+    getOwnedNFTs,
+    {
+      contract: nftCollectionContract,
+      owner: router.query.address as string,
+    }
   );
 
-  const { data: ownedNfts, isLoading: loadingOwnedNfts } = useOwnedNFTs(
-    nftCollection,
-    router.query.address as string
-  );
+  // const { data: directListings, isLoading: loadingDirects } =
+  //   useValidDirectListings(marketplace, {
+  //     seller: router.query.address as string,
+  //   });
 
-  const { data: directListings, isLoading: loadingDirects } =
-    useValidDirectListings(marketplace, {
-      seller: router.query.address as string,
-    });
-
-  const { data: auctionListings, isLoading: loadingAuctions } =
-    useValidEnglishAuctions(marketplace, {
-      seller: router.query.address as string,
-    });
+  // const { data: auctionListings, isLoading: loadingAuctions } =
+  //   useValidEnglishAuctions(marketplace, {
+  //     seller: router.query.address as string,
+  //   });
 
   return (
     <Container maxWidth="lg">
@@ -112,7 +101,7 @@ export default function ProfilePage() {
         />
       </div>
 
-      <div
+      {/* <div
         className={`${
           tab === "listings" ? styles.activeTabContent : styles.tabContent
         }`}
@@ -126,9 +115,9 @@ export default function ProfilePage() {
             <ListingWrapper listing={listing} key={listing.id} />
           ))
         )}
-      </div>
+      </div> */}
 
-      <div
+      {/* <div
         className={`${
           tab === "auctions" ? styles.activeTabContent : styles.tabContent
         }`}
@@ -142,7 +131,7 @@ export default function ProfilePage() {
             <ListingWrapper listing={listing} key={listing.id} />
           ))
         )}
-      </div>
+      </div> */}
     </Container>
   );
 }

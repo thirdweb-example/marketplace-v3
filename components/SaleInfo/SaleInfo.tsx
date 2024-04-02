@@ -1,11 +1,10 @@
-import { NFT as NFTType } from "@thirdweb-dev/sdk";
+import { sendAndConfirmTransaction, type NFT as NFTType } from "thirdweb";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import styles from "../../styles/Sale.module.css";
 import profileStyles from "../../styles/Profile.module.css";
 import {
-  useContract,
   useCreateAuctionListing,
   useCreateDirectListing,
   Web3Button,
@@ -13,10 +12,16 @@ import {
 import {
   MARKETPLACE_ADDRESS,
   NFT_COLLECTION_ADDRESS,
+  nftCollectionContract,
 } from "../../const/contractAddresses";
 import { useRouter } from "next/router";
 import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../util/toastConfig";
+import {
+  isApprovedForAll,
+  setApprovalForAll,
+} from "thirdweb/extensions/erc721";
+import { useActiveAccount } from "thirdweb/react";
 
 type Props = {
   nft: NFTType;
@@ -41,16 +46,7 @@ type DirectFormData = {
 
 export default function SaleInfo({ nft }: Props) {
   const router = useRouter();
-  // Connect to marketplace contract
-  const { contract: marketplace } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace-v3"
-  );
-
-  // useContract is a React hook that returns an object with the contract key.
-  // The value of the contract key is an instance of an NFT_COLLECTION on the blockchain.
-  // This instance is created from the contract address (NFT_COLLECTION_ADDRESS)
-  const { contract: nftCollection } = useContract(NFT_COLLECTION_ADDRESS);
+  const account = useActiveAccount();
 
   // Hook provides an async function to create a new auction listing
   const { mutateAsync: createAuctionListing } =
@@ -78,18 +74,26 @@ export default function SaleInfo({ nft }: Props) {
 
   // User requires to set marketplace approval before listing
   async function checkAndProvideApproval() {
+    if (!account) return false;
     // Check if approval is required
-    const hasApproval = await nftCollection?.call("isApprovedForAll", [
-      nft.owner,
-      MARKETPLACE_ADDRESS,
-    ]);
+    const hasApproval = await isApprovedForAll({
+      contract: nftCollectionContract,
+      owner: account.address,
+      operator: MARKETPLACE_ADDRESS,
+    });
 
     // If it is, provide approval
     if (!hasApproval) {
-      const txResult = await nftCollection?.call("setApprovalForAll", [
-        MARKETPLACE_ADDRESS,
-        true,
-      ]);
+      const transaction = setApprovalForAll({
+        contract: nftCollectionContract,
+        approved: true,
+        operator: MARKETPLACE_ADDRESS,
+      });
+
+      const txResult = await sendAndConfirmTransaction({
+        transaction,
+        account,
+      });
 
       if (txResult) {
         toast.success("Marketplace approval granted", {
@@ -116,30 +120,32 @@ export default function SaleInfo({ nft }: Props) {
     });
 
   async function handleSubmissionAuction(data: AuctionFormData) {
-    await checkAndProvideApproval();
-    const txResult = await createAuctionListing({
-      assetContractAddress: data.nftContractAddress,
-      tokenId: data.tokenId,
-      buyoutBidAmount: data.buyoutPrice,
-      minimumBidAmount: data.floorPrice,
-      startTimestamp: new Date(data.startDate),
-      endTimestamp: new Date(data.endDate),
-    });
+    if (await checkAndProvideApproval()) {
+      const txResult = await createAuctionListing({
+        assetContractAddress: data.nftContractAddress,
+        tokenId: data.tokenId,
+        buyoutBidAmount: data.buyoutPrice,
+        minimumBidAmount: data.floorPrice,
+        startTimestamp: new Date(data.startDate),
+        endTimestamp: new Date(data.endDate),
+      });
 
-    return txResult;
+      return txResult;
+    }
   }
 
   async function handleSubmissionDirect(data: DirectFormData) {
-    await checkAndProvideApproval();
-    const txResult = await createDirectListing({
-      assetContractAddress: data.nftContractAddress,
-      tokenId: data.tokenId,
-      pricePerToken: data.price,
-      startTimestamp: new Date(data.startDate),
-      endTimestamp: new Date(data.endDate),
-    });
+    if (await checkAndProvideApproval()) {
+      const txResult = await createDirectListing({
+        assetContractAddress: data.nftContractAddress,
+        tokenId: data.tokenId,
+        pricePerToken: data.price,
+        startTimestamp: new Date(data.startDate),
+        endTimestamp: new Date(data.endDate),
+      });
 
-    return txResult;
+      return txResult;
+    }
   }
 
   return (

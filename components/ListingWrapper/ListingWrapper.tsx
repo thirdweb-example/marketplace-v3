@@ -1,23 +1,25 @@
-import { useContract, useNFT } from "@thirdweb-dev/react";
-import { DirectListingV3, EnglishAuction } from "@thirdweb-dev/sdk";
+import { getNFT } from "thirdweb/extensions/erc721";
 import Link from "next/link";
 import React from "react";
-import { NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
+import { nftCollectionContract } from "../../const/contractAddresses";
 import styles from "../../styles/Buy.module.css";
 import NFT from "../NFT/NFT";
 import Skeleton from "../Skeleton/Skeleton";
+import { useReadContract } from "thirdweb/react";
 
 type Props = {
-  listing: DirectListingV3 | EnglishAuction;
+  // TODO update type
+  listing: any;
 };
 
 /**
  * Accepts a listing and renders the associated NFT for it
  */
 export default function ListingWrapper({ listing }: Props) {
-  const { contract: nftContract } = useContract(NFT_COLLECTION_ADDRESS);
-
-  const { data: nft, isLoading } = useNFT(nftContract, listing.asset.id);
+  const { data: nft, isLoading } = useReadContract(getNFT, {
+    contract: nftCollectionContract,
+    tokenId: listing.tokenId,
+  });
 
   if (isLoading) {
     return (
@@ -31,7 +33,7 @@ export default function ListingWrapper({ listing }: Props) {
 
   return (
     <Link
-      href={`/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
+      href={`/token/${nftCollectionContract.address}/${nft.metadata.id}`}
       key={nft.metadata.id}
       className={styles.nftContainer}
     >

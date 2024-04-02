@@ -1,28 +1,16 @@
-import {
-  ThirdwebNftMedia,
-  useContract,
-  useValidDirectListings,
-  useValidEnglishAuctions,
-} from "@thirdweb-dev/react";
-import { NFT } from "@thirdweb-dev/sdk";
 import React from "react";
-import {
-  MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-} from "../../const/contractAddresses";
+import { NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
 import Skeleton from "../Skeleton/Skeleton";
 import styles from "./NFT.module.css";
+import { NFT } from "thirdweb";
+import { MediaRenderer } from "thirdweb/react";
+import { thirdwebClient } from "../../const/client";
 
 type Props = {
   nft: NFT;
 };
 
 export default function NFTComponent({ nft }: Props) {
-  const { contract: marketplace, isLoading: loadingContract } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace-v3"
-  );
-
   // 1. Load if the NFT is for direct listing
   const { data: directListing, isLoading: loadingDirect } =
     useValidDirectListings(marketplace, {
@@ -39,13 +27,17 @@ export default function NFTComponent({ nft }: Props) {
 
   return (
     <>
-      <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
+      <MediaRenderer
+        client={thirdwebClient}
+        src={nft.metadata.animation_url || nft.metadata.image}
+        className={styles.nftImage}
+      />
 
-      <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
+      <p className={styles.nftTokenId}>Token ID #{nft.id.toString()}</p>
       <p className={styles.nftName}>{nft.metadata.name}</p>
 
       <div className={styles.priceContainer}>
-        {loadingContract || loadingDirect || loadingAuction ? (
+        {loadingDirect || loadingAuction ? (
           <Skeleton width="100%" height="100%" />
         ) : directListing && directListing[0] ? (
           <div className={styles.nftPriceContainer}>

@@ -6,21 +6,15 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "export": "next export",
-    "deploy": "next build && next export && npx thirdweb@latest upload out"
+    "lint": "next lint"
   },
   "dependencies": {
-    "@thirdweb-dev/chains": "^0",
-    "@thirdweb-dev/react": "^4",
-    "@thirdweb-dev/sdk": "^4",
-    "ethers": "^5",
     "next": "^14",
-    "nextjs-progressbar": "^0.0.16",
     "react": "^18.2",
     "react-dom": "^18.2",
     "react-hook-form": "^7.43.0",
-    "react-hot-toast": "^2.4.0"
+    "react-hot-toast": "^2.4.0",
+    "thirdweb": "5.1.0-nightly-d2ffb8207131ec67f80a5ee5e58ef2aa7f7938db-20240402080132"
   },
   "devDependencies": {
     "@types/node": "^20.12.2",
