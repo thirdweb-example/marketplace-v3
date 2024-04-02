@@ -15,7 +15,7 @@
     "@thirdweb-dev/react": "^4",
     "@thirdweb-dev/sdk": "^4",
     "ethers": "^5",
-    "next": "^13",
+    "next": "^14",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18.2",
     "react-dom": "^18.2",
@@ -23,10 +23,10 @@
     "react-hot-toast": "^2.4.0"
   },
   "devDependencies": {
-    "@types/node": "^18.11.11",
+    "@types/node": "^20.12.2",
     "@types/react": "^18",
     "eslint": "^8.29.0",
-    "eslint-config-next": "^13",
-    "typescript": "^4.9.4"
+    "eslint-config-next": "^14",
+    "typescript": "^5.4.3"
   }
 }
