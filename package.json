@@ -14,7 +14,7 @@
     "react-dom": "^18.2",
     "react-hook-form": "^7.43.0",
     "react-hot-toast": "^2.4.0",
-    "thirdweb": "5.1.0-nightly-d2ffb8207131ec67f80a5ee5e58ef2aa7f7938db-20240402080132"
+    "thirdweb": "5.2.1-nightly-97556c4d5dd27bea3f711902734645d28824dfae-20240405102131"
   },
   "devDependencies": {
     "@types/node": "^20.12.2",

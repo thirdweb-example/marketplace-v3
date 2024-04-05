@@ -5,13 +5,9 @@ import { useForm } from "react-hook-form";
 import styles from "../../styles/Sale.module.css";
 import profileStyles from "../../styles/Profile.module.css";
 import {
-  useCreateAuctionListing,
-  useCreateDirectListing,
-  Web3Button,
-} from "@thirdweb-dev/react";
-import {
   MARKETPLACE_ADDRESS,
   NFT_COLLECTION_ADDRESS,
+  marketplaceContract,
   nftCollectionContract,
 } from "../../const/contractAddresses";
 import { useRouter } from "next/router";
@@ -21,7 +17,8 @@ import {
   isApprovedForAll,
   setApprovalForAll,
 } from "thirdweb/extensions/erc721";
-import { useActiveAccount } from "thirdweb/react";
+import { TransactionButton, useActiveAccount } from "thirdweb/react";
+import { createAuction, createListing } from "thirdweb/extensions/marketplace";
 
 type Props = {
   nft: NFTType;
@@ -29,7 +26,7 @@ type Props = {
 
 type AuctionFormData = {
   nftContractAddress: string;
-  tokenId: string;
+  tokenId: bigint;
   startDate: Date;
   endDate: Date;
   floorPrice: string;
@@ -38,7 +35,7 @@ type AuctionFormData = {
 
 type DirectFormData = {
   nftContractAddress: string;
-  tokenId: string;
+  tokenId: bigint;
   price: string;
   startDate: Date;
   endDate: Date;
@@ -48,19 +45,11 @@ export default function SaleInfo({ nft }: Props) {
   const router = useRouter();
   const account = useActiveAccount();
 
-  // Hook provides an async function to create a new auction listing
-  const { mutateAsync: createAuctionListing } =
-    useCreateAuctionListing(marketplace);
-
-  // Hook provides an async function to create a new direct listing
-  const { mutateAsync: createDirectListing } =
-    useCreateDirectListing(marketplace);
-
   // Manage form submission state using tabs and conditional rendering
   const [tab, setTab] = useState<"direct" | "auction">("direct");
 
   // Manage form values using react-hook-form library: Auction form
-  const { register: registerAuction, handleSubmit: handleSubmitAuction } =
+  const { register: registerAuction, getValues: getAuctionValues } =
     useForm<AuctionFormData>({
       defaultValues: {
         nftContractAddress: NFT_COLLECTION_ADDRESS,
@@ -108,7 +97,7 @@ export default function SaleInfo({ nft }: Props) {
   }
 
   // Manage form values using react-hook-form library: Direct form
-  const { register: registerDirect, handleSubmit: handleSubmitDirect } =
+  const { register: registerDirect, getValues: getDirectValues } =
     useForm<DirectFormData>({
       defaultValues: {
         nftContractAddress: NFT_COLLECTION_ADDRESS,
@@ -118,35 +107,6 @@ export default function SaleInfo({ nft }: Props) {
         price: "0",
       },
     });
-
-  async function handleSubmissionAuction(data: AuctionFormData) {
-    if (await checkAndProvideApproval()) {
-      const txResult = await createAuctionListing({
-        assetContractAddress: data.nftContractAddress,
-        tokenId: data.tokenId,
-        buyoutBidAmount: data.buyoutPrice,
-        minimumBidAmount: data.floorPrice,
-        startTimestamp: new Date(data.startDate),
-        endTimestamp: new Date(data.endDate),
-      });
-
-      return txResult;
-    }
-  }
-
-  async function handleSubmissionDirect(data: DirectFormData) {
-    if (await checkAndProvideApproval()) {
-      const txResult = await createDirectListing({
-        assetContractAddress: data.nftContractAddress,
-        tokenId: data.tokenId,
-        pricePerToken: data.price,
-        startTimestamp: new Date(data.startDate),
-        endTimestamp: new Date(data.endDate),
-      });
-
-      return txResult;
-    }
-  }
 
   return (
     <>
@@ -207,11 +167,23 @@ export default function SaleInfo({ nft }: Props) {
             step={0.000001}
             {...registerDirect("price")}
           />
+          <TransactionButton
+            transaction={async () => {
+              // Check if approval is required
+              await checkAndProvideApproval();
 
-          <Web3Button
-            contractAddress={MARKETPLACE_ADDRESS}
-            action={async () => {
-              await handleSubmitDirect(handleSubmissionDirect)();
+              // retrieve form data
+              const data = getDirectValues();
+
+              // create the auction transaction
+              return createListing({
+                contract: marketplaceContract,
+                assetContractAddress: data.nftContractAddress,
+                pricePerToken: data.price,
+                startTimestamp: data.startDate,
+                endTimestamp: data.endDate,
+                tokenId: data.tokenId,
+              });
             }}
             onError={(error) => {
               toast(`Listed Failed! Reason: ${error.cause}`, {
@@ -220,19 +192,19 @@ export default function SaleInfo({ nft }: Props) {
                 position: "bottom-center",
               });
             }}
-            onSuccess={(txResult) => {
+            onTransactionConfirmed={() => {
               toast("Listed Successfully!", {
                 icon: "🥳",
                 style: toastStyle,
                 position: "bottom-center",
               });
               router.push(
-                `/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`
+                `/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id.toString()}`
               );
             }}
           >
-            Create Direct Listing
-          </Web3Button>
+            Create Auction Listing
+          </TransactionButton>
         </div>
 
         {/* Auction listing fields */}
@@ -283,10 +255,24 @@ export default function SaleInfo({ nft }: Props) {
             {...registerAuction("buyoutPrice")}
           />
 
-          <Web3Button
-            contractAddress={MARKETPLACE_ADDRESS}
-            action={async () => {
-              return await handleSubmitAuction(handleSubmissionAuction)();
+          <TransactionButton
+            transaction={async () => {
+              // Check if approval is required
+              await checkAndProvideApproval();
+
+              // retrieve form data
+              const data = getAuctionValues();
+
+              // create the auction transaction
+              return createAuction({
+                contract: marketplaceContract,
+                assetContractAddress: data.nftContractAddress,
+                buyoutBidAmount: data.buyoutPrice,
+                minimumBidAmount: data.floorPrice,
+                startTimestamp: data.startDate,
+                endTimestamp: data.endDate,
+                tokenId: data.tokenId,
+              });
             }}
             onError={(error) => {
               toast(`Listed Failed! Reason: ${error.cause}`, {
@@ -295,19 +281,19 @@ export default function SaleInfo({ nft }: Props) {
                 position: "bottom-center",
               });
             }}
-            onSuccess={(txResult) => {
+            onTransactionConfirmed={() => {
               toast("Listed Successfully!", {
                 icon: "🥳",
                 style: toastStyle,
                 position: "bottom-center",
               });
               router.push(
-                `/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`
+                `/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id.toString()}`
               );
             }}
           >
             Create Auction Listing
-          </Web3Button>
+          </TransactionButton>
         </div>
       </div>
     </>

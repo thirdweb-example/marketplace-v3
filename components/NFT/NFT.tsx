@@ -1,10 +1,17 @@
 import React from "react";
-import { NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
+import {
+  NFT_COLLECTION_ADDRESS,
+  marketplaceContract,
+} from "../../const/contractAddresses";
 import Skeleton from "../Skeleton/Skeleton";
 import styles from "./NFT.module.css";
 import { NFT } from "thirdweb";
-import { MediaRenderer } from "thirdweb/react";
+import { MediaRenderer, useReadContract } from "thirdweb/react";
 import { thirdwebClient } from "../../const/client";
+import {
+  getAllValidAuctions,
+  getAllValidListings,
+} from "thirdweb/extensions/marketplace";
 
 type Props = {
   nft: NFT;
@@ -12,18 +19,28 @@ type Props = {
 
 export default function NFTComponent({ nft }: Props) {
   // 1. Load if the NFT is for direct listing
-  const { data: directListing, isLoading: loadingDirect } =
-    useValidDirectListings(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
+  const { data: directListings, isLoading: loadingDirect } = useReadContract(
+    getAllValidListings,
+    {
+      contract: marketplaceContract,
+    }
+  );
+
+  const directListing = directListings?.find(
+    (listing) => listing.tokenId === nft.id
+  );
 
   // 2. Load if the NFT is for auction
-  const { data: auctionListing, isLoading: loadingAuction } =
-    useValidEnglishAuctions(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
+  const { data: auctionListings, isLoading: loadingAuction } = useReadContract(
+    getAllValidAuctions,
+    {
+      contract: marketplaceContract,
+    }
+  );
+
+  const auctionListing = auctionListings?.find(
+    (listing) => listing.tokenId === nft.id
+  );
 
   return (
     <>
@@ -39,23 +56,23 @@ export default function NFTComponent({ nft }: Props) {
       <div className={styles.priceContainer}>
         {loadingDirect || loadingAuction ? (
           <Skeleton width="100%" height="100%" />
-        ) : directListing && directListing[0] ? (
+        ) : directListing ? (
           <div className={styles.nftPriceContainer}>
             <div>
               <p className={styles.nftPriceLabel}>Price</p>
               <p className={styles.nftPriceValue}>
-                {`${directListing[0]?.currencyValuePerToken.displayValue}
-          ${directListing[0]?.currencyValuePerToken.symbol}`}
+                {`${directListing.currencyValuePerToken.displayValue}
+          ${directListing.currencyValuePerToken.symbol}`}
               </p>
             </div>
           </div>
-        ) : auctionListing && auctionListing[0] ? (
+        ) : auctionListing ? (
           <div className={styles.nftPriceContainer}>
             <div>
               <p className={styles.nftPriceLabel}>Minimum Bid</p>
               <p className={styles.nftPriceValue}>
-                {`${auctionListing[0]?.minimumBidCurrencyValue.displayValue}
-          ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}
+                {`${auctionListing.minimumBidCurrencyValue.displayValue}
+          ${auctionListing.minimumBidCurrencyValue.symbol}`}
               </p>
             </div>
           </div>

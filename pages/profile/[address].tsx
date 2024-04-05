@@ -4,11 +4,18 @@ import Container from "../../components/Container/Container";
 import ListingWrapper from "../../components/ListingWrapper/ListingWrapper";
 import NFTGrid from "../../components/NFT/NFTGrid";
 import Skeleton from "../../components/Skeleton/Skeleton";
-import { nftCollectionContract } from "../../const/contractAddresses";
+import {
+  marketplaceContract,
+  nftCollectionContract,
+} from "../../const/contractAddresses";
 import styles from "../../styles/Profile.module.css";
 import randomColor from "../../util/randomColor";
 import { useReadContract } from "thirdweb/react";
 import { getOwnedNFTs } from "thirdweb/extensions/erc721";
+import {
+  getAllValidAuctions,
+  getAllValidListings,
+} from "thirdweb/extensions/marketplace";
 
 const [randomColor1, randomColor2, randomColor3, randomColor4] = [
   randomColor(),
@@ -29,15 +36,27 @@ export default function ProfilePage() {
     }
   );
 
-  // const { data: directListings, isLoading: loadingDirects } =
-  //   useValidDirectListings(marketplace, {
-  //     seller: router.query.address as string,
-  //   });
+  const { data: directListings, isLoading: loadingDirects } = useReadContract(
+    getAllValidListings,
+    {
+      contract: marketplaceContract,
+    }
+  );
 
-  // const { data: auctionListings, isLoading: loadingAuctions } =
-  //   useValidEnglishAuctions(marketplace, {
-  //     seller: router.query.address as string,
-  //   });
+  const selletDirectListings = directListings?.filter(
+    (listing) => listing.creatorAddress === router.query.address
+  );
+
+  const { data: auctionListings, isLoading: loadingAuctions } = useReadContract(
+    getAllValidAuctions,
+    {
+      contract: marketplaceContract,
+    }
+  );
+
+  const sellerAuctions = auctionListings?.filter(
+    (listing) => listing.creatorAddress === router.query.address
+  );
 
   return (
     <Container maxWidth="lg">
@@ -101,37 +120,37 @@ export default function ProfilePage() {
         />
       </div>
 
-      {/* <div
+      <div
         className={`${
           tab === "listings" ? styles.activeTabContent : styles.tabContent
         }`}
       >
         {loadingDirects ? (
           <p>Loading...</p>
-        ) : directListings && directListings.length === 0 ? (
+        ) : !selletDirectListings || selletDirectListings.length === 0 ? (
           <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
         ) : (
-          directListings?.map((listing) => (
+          selletDirectListings.map((listing) => (
             <ListingWrapper listing={listing} key={listing.id} />
           ))
         )}
-      </div> */}
+      </div>
 
-      {/* <div
+      <div
         className={`${
           tab === "auctions" ? styles.activeTabContent : styles.tabContent
         }`}
       >
         {loadingAuctions ? (
           <p>Loading...</p>
-        ) : auctionListings && auctionListings.length === 0 ? (
+        ) : !sellerAuctions || sellerAuctions.length === 0 ? (
           <p>Nothing for sale yet! Head to the sell tab to list an NFT.</p>
         ) : (
-          auctionListings?.map((listing) => (
+          sellerAuctions?.map((listing) => (
             <ListingWrapper listing={listing} key={listing.id} />
           ))
         )}
-      </div> */}
+      </div>
     </Container>
   );
 }

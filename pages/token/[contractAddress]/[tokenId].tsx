@@ -1,13 +1,9 @@
-import {
-  useValidDirectListings,
-  useValidEnglishAuctions,
-  Web3Button,
-} from "@thirdweb-dev/react";
 import React, { useState } from "react";
 import Container from "../../../components/Container/Container";
 import { GetStaticProps, GetStaticPaths } from "next";
 import {
   ETHERSCAN_URL,
+  marketplaceContract,
   NFT_COLLECTION_ADDRESS,
   nftCollectionContract,
 } from "../../../const/contractAddresses";
@@ -18,9 +14,18 @@ import Skeleton from "../../../components/Skeleton/Skeleton";
 import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../../util/toastConfig";
 import { getNFT, getNFTs, transferEvent } from "thirdweb/extensions/erc721";
+import {
+  getAllValidAuctions,
+  getAllValidListings,
+} from "thirdweb/extensions/marketplace";
 import { getContractMetadata } from "thirdweb/extensions/common";
 import type { NFT } from "thirdweb";
-import { MediaRenderer, useContractEvents } from "thirdweb/react";
+import {
+  MediaRenderer,
+  useContractEvents,
+  useReadContract,
+} from "thirdweb/react";
+import { stringify } from "thirdweb/utils";
 import { thirdwebClient } from "../../../const/client";
 
 type Props = {
@@ -35,28 +40,27 @@ const TRANSFER_EVENT = transferEvent();
 export default function TokenPage({ nft, contractMetadata }: Props) {
   const [bidValue, setBidValue] = useState<string>();
 
-  const { data: directListing, isLoading: loadingDirect } =
-    useValidDirectListings(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
+  const { data: directListing, isLoading: loadingDirect } = useReadContract(
+    getAllValidListings,
+    { contract: marketplaceContract }
+  );
 
   // 2. Load if the NFT is for auction
-  const { data: auctionListing, isLoading: loadingAuction } =
-    useValidEnglishAuctions(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
+  const { data: auctionListing, isLoading: loadingAuction } = useReadContract(
+    getAllValidAuctions,
+    {
+      contract: marketplaceContract,
+    }
+  );
 
-  // Load historical transfer events: TODO - more event types like sale
-  const { data: transferEvents, isLoading: loadingTransferEvents } =
-    useContractEvents({
-      contract: nftCollectionContract,
-      events: [TRANSFER_EVENT],
-    });
+  // Load historical transfer events
+  const { data: transferEvents } = useContractEvents({
+    contract: nftCollectionContract,
+    events: [TRANSFER_EVENT],
+  });
 
   async function createBidOrOffer() {
-    let txResult;
+    // let txResult;
     if (!bidValue) {
       toast(`Please enter a bid value`, {
         icon: "❌",
@@ -66,40 +70,40 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
       return;
     }
 
-    if (auctionListing?.[0]) {
-      txResult = await marketplace?.englishAuctions.makeBid(
-        auctionListing[0].id,
-        bidValue
-      );
-    } else if (directListing?.[0]) {
-      txResult = await marketplace?.offers.makeOffer({
-        assetContractAddress: NFT_COLLECTION_ADDRESS,
-        tokenId: nft.metadata.id,
-        totalPrice: bidValue,
-      });
-    } else {
-      throw new Error("No valid listing found for this NFT");
-    }
+    // if (auctionListing?.[0]) {
+    //   txResult = await marketplace?.englishAuctions.makeBid(
+    //     auctionListing[0].id,
+    //     bidValue
+    //   );
+    // } else if (directListing?.[0]) {
+    //   txResult = await marketplace?.offers.makeOffer({
+    //     assetContractAddress: NFT_COLLECTION_ADDRESS,
+    //     tokenId: nft.metadata.id,
+    //     totalPrice: bidValue,
+    //   });
+    // } else {
+    throw new Error("No valid listing found for this NFT");
+    // }
 
-    return txResult;
+    // return txResult;
   }
 
   async function buyListing() {
-    let txResult;
+    // let txResult;
 
-    if (auctionListing?.[0]) {
-      txResult = await marketplace?.englishAuctions.buyoutAuction(
-        auctionListing[0].id
-      );
-    } else if (directListing?.[0]) {
-      txResult = await marketplace?.directListings.buyFromListing(
-        directListing[0].id,
-        1
-      );
-    } else {
-      throw new Error("No valid listing found for this NFT");
-    }
-    return txResult;
+    // if (auctionListing?.[0]) {
+    //   txResult = await marketplace?.englishAuctions.buyoutAuction(
+    //     auctionListing[0].id
+    //   );
+    // } else if (directListing?.[0]) {
+    //   txResult = await marketplace?.directListings.buyFromListing(
+    //     directListing[0].id,
+    //     1
+    //   );
+    // } else {
+    throw new Error("No valid listing found for this NFT");
+    // }
+    // return txResult;
   }
 
   return (
@@ -197,7 +201,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
             )}
             <h1 className={styles.title}>{nft.metadata.name}</h1>
             <p className={styles.collectionName}>
-              Token ID #{nft.metadata.id.toString()}
+              Token ID #{nft.id.toString()}
             </p>
 
             <Link
@@ -278,7 +282,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
               <Skeleton width="100%" height="164" />
             ) : (
               <>
-                <Web3Button
+                {/* <Web3Button
                   contractAddress={MARKETPLACE_ADDRESS}
                   action={async () => await buyListing()}
                   className={styles.btn}
@@ -298,7 +302,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   }}
                 >
                   Buy at asking price
-                </Web3Button>
+                </Web3Button> */}
 
                 <div className={`${styles.listingTimeContainer} ${styles.or}`}>
                   <p className={styles.listingTime}>or</p>
@@ -317,7 +321,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   }}
                 />
 
-                <Web3Button
+                {/* <Web3Button
                   contractAddress={MARKETPLACE_ADDRESS}
                   action={async () => await createBidOrOffer()}
                   className={styles.btn}
@@ -338,7 +342,7 @@ export default function TokenPage({ nft, contractMetadata }: Props) {
                   }}
                 >
                   Place bid
-                </Web3Button>
+                </Web3Button> */}
               </>
             )}
           </div>
@@ -366,7 +370,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
 
   return {
     props: {
-      nft,
+      nft: JSON.parse(stringify(nft)),
       contractMetadata: contractMetadata || null,
     },
     revalidate: 1, // https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
@@ -382,7 +386,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     return {
       params: {
         contractAddress: NFT_COLLECTION_ADDRESS,
-        tokenId: nft.metadata.id.toString(),
+        tokenId: nft.id.toString(),
       },
     };
   });
