@@ -29,6 +29,10 @@ body {
 	font-weight: 400;
 }
 
+.gradient {
+	@apply bg-gradient-to-tl from-[#0294fe] to-[#9b4dff];
+}
+
 h1 {
 	font-size: 2rem;
 	font-weight: 700;

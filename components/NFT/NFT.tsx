@@ -39,14 +39,14 @@ export default async function NFTComponent({
 					? "#"
 					: `/token/${NFT_COLLECTION.address}/${nft.metadata.id}`
 			}
-			className="flex flex-col w-full h-[350px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
+			className="transition-all hover:scale-105 hover:shadow-lg flex flex-col w-full h-[350px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
 			onClick={
 				overrideOnclickBehavior
 					? () => overrideOnclickBehavior(nft)
 					: undefined
 			}
 		>
-			<div className="relative w-full h-64 bg-slate-900">
+			<div className="relative w-full h-64 bg-white/[.04]">
 				{fileResponse && (
 					<Image
 						src={fileResponse.url}
@@ -56,19 +56,19 @@ export default async function NFTComponent({
 					/>
 				)}
 			</div>
-			<div className="flex flex-1 justify-between px-2 items-center w-full">
+			<div className="flex items-center justify-between flex-1 w-full px-3">
 				<div className="flex flex-col justify-center">
-					<p className="text-sm mt-3">Token ID #{nft.metadata.id}</p>
-					<p className="text-ellipsis whitespace-nowrap overflow-hidden max-w-full text-white text-base mb-3 mt-1">
+					<p className="mt-3 text-sm">Token ID #{nft.metadata.id}</p>
+					<p className="max-w-full mt-1 mb-3 overflow-hidden text-base text-white text-ellipsis whitespace-nowrap">
 						{nft.metadata.name}
 					</p>
 				</div>
 
 				<div className="flex flex-col justify-center">
-					<p className="mb-1 text-ellipsis whitespace-nowrap overflow-hidden max-w-full font-medium text-white/60">
+					<p className="max-w-full mb-1 overflow-hidden font-medium text-ellipsis whitespace-nowrap text-white/60">
 						Price
 					</p>
-					<p className="text-white text-ellipsis whitespace-nowrap overflow-hidden max-w-full">
+					<p className="max-w-full overflow-hidden text-white text-ellipsis whitespace-nowrap">
 						{directListing
 							? `${directListing?.currencyValuePerToken.displayValue}${directListing?.currencyValuePerToken.symbol}`
 							: auctionListing
