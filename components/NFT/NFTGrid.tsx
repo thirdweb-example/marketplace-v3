@@ -1,55 +1,50 @@
-import type { NFT as NFTType } from "@thirdweb-dev/sdk";
-import Link from "next/link";
+"use client";
+import type { NFT as NFTType } from "thirdweb";
 import React from "react";
-import { NFT_COLLECTION_ADDRESS } from "../../const/contractAddresses";
-import Skeleton from "../Skeleton/Skeleton";
+import Skeleton from "@/components/Skeleton/Skeleton";
 import NFT from "./NFT";
-import styles from "../../styles/Buy.module.css";
+import { DirectListing, EnglishAuction } from "thirdweb/extensions/marketplace";
 
 type Props = {
-  isLoading: boolean;
-  data: NFTType[] | undefined;
-  overrideOnclickBehavior?: (nft: NFTType) => void;
-  emptyText?: string;
+	nftData: {
+		tokenId: bigint;
+		directListing?: DirectListing;
+		auctionListing?: EnglishAuction;
+	}[];
+	overrideOnclickBehavior?: (nft: NFTType) => void;
+	emptyText?: string;
 };
 
 export default function NFTGrid({
-  isLoading,
-  data,
-  overrideOnclickBehavior,
-  emptyText = "No NFTs found for this collection.",
+	nftData,
+	overrideOnclickBehavior,
+	emptyText = "No NFTs found for this collection.",
 }: Props) {
-  return (
-    <div className={styles.nftGridContainer}>
-      {isLoading ? (
-        [...Array(20)].map((_, index) => (
-          <div key={index} className={styles.nftContainer}>
-            <Skeleton key={index} width={"100%"} height="312px" />
-          </div>
-        ))
-      ) : data && data.length > 0 ? (
-        data.map((nft) =>
-          !overrideOnclickBehavior ? (
-            <Link
-              href={`/token/${NFT_COLLECTION_ADDRESS}/${nft.metadata.id}`}
-              key={nft.metadata.id}
-              className={styles.nftContainer}
-            >
-              <NFT nft={nft} />
-            </Link>
-          ) : (
-            <div
-              key={nft.metadata.id}
-              className={styles.nftContainer}
-              onClick={() => overrideOnclickBehavior(nft)}
-            >
-              <NFT nft={nft} />
-            </div>
-          )
-        )
-      ) : (
-        <p>{emptyText}</p>
-      )}
-    </div>
-  );
+	return (
+		<div className="grid grid-cols-4 gap-6 justify-start">
+			{nftData && nftData.length > 0 ? (
+				nftData.map((nft) => (
+					<NFT
+						key={nft.tokenId}
+						{...nft}
+						overrideOnclickBehavior={overrideOnclickBehavior}
+					/>
+				))
+			) : (
+				<p>{emptyText}</p>
+			)}
+		</div>
+	);
+}
+
+export function NFTGridLoading() {
+	return (
+		<div className="grid grid-cols-4 gap-6">
+			{[...Array(20)].map((_, index) => (
+				<div key={index} className="w-full h-[350px] rounded-lg">
+					<Skeleton key={index} width="100%" height="100%" />
+				</div>
+			))}
+		</div>
+	);
 }
