@@ -21,25 +21,33 @@ type Props = {
  * Accepts a listing and renders the associated NFT for it
  */
 export default async function ListingGrid(props: Props) {
-	// 1. Load if the NFT is for direct listing
-	const listingsCount = await totalListings({
+	const listingsCountPromise = totalListings({
 		contract: MARKETPLACE,
 	});
-	const listings = await getAllValidListings({
+	const auctionsCountPromise = totalAuctions({
+		contract: MARKETPLACE,
+	});
+
+	const [listingsCount, auctionsCount] = await Promise.all([
+		listingsCountPromise,
+		auctionsCountPromise,
+	]);
+
+	const listingsPromise = getAllValidListings({
 		contract: MARKETPLACE,
 		start: 0,
 		count: listingsCount,
 	});
-
-	// 2. Load if the NFT is for auction
-	const auctionsCount = await totalAuctions({
-		contract: MARKETPLACE,
-	});
-	const auctions = await getAllValidAuctions({
+	const auctionsPromise = getAllValidAuctions({
 		contract: MARKETPLACE,
 		start: 0,
 		count: auctionsCount,
 	});
+
+	const [listings, auctions] = await Promise.all([
+		listingsPromise,
+		auctionsPromise,
+	]);
 
 	// Retrieve all NFTs from the listings
 	const tokenIds = Array.from(

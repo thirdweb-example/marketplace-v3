@@ -1,13 +1,13 @@
 "use client";
 import type { NFT as NFTType } from "thirdweb";
 import React from "react";
-import Skeleton from "@/components/Skeleton/Skeleton";
-import NFT from "./NFT";
+import NFT, { LoadingNFTComponent } from "./NFT";
 import { DirectListing, EnglishAuction } from "thirdweb/extensions/marketplace";
 
 type Props = {
 	nftData: {
 		tokenId: bigint;
+		nft?: NFTType;
 		directListing?: DirectListing;
 		auctionListing?: EnglishAuction;
 	}[];
@@ -20,30 +20,34 @@ export default function NFTGrid({
 	overrideOnclickBehavior,
 	emptyText = "No NFTs found for this collection.",
 }: Props) {
-	return (
-		<div className="grid grid-cols-4 gap-6 justify-start">
-			{nftData && nftData.length > 0 ? (
-				nftData.map((nft) => (
+	if (nftData && nftData.length > 0) {
+		return (
+			<div className="grid justify-start grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				{nftData.map((nft) => (
 					<NFT
 						key={nft.tokenId}
 						{...nft}
 						overrideOnclickBehavior={overrideOnclickBehavior}
 					/>
-				))
-			) : (
-				<p>{emptyText}</p>
-			)}
+				))}
+			</div>
+		);
+	}
+
+	return (
+		<div className="flex justify-center items-center h-[500px]">
+			<p className="max-w-lg text-lg font-semibold text-center text-white/60">
+				{emptyText}
+			</p>
 		</div>
 	);
 }
 
 export function NFTGridLoading() {
 	return (
-		<div className="grid grid-cols-4 gap-6">
+		<div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 			{[...Array(20)].map((_, index) => (
-				<div key={index} className="w-full h-[350px] rounded-lg">
-					<Skeleton key={index} width="100%" height="100%" />
-				</div>
+				<LoadingNFTComponent key={index} />
 			))}
 		</div>
 	);

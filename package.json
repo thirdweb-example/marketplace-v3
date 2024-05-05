@@ -11,6 +11,7 @@
     "deploy": "next build && next export && npx thirdweb@latest upload out"
   },
   "dependencies": {
+    "@radix-ui/react-icons": "^1.3.0",
     "classnames": "^2.5.1",
     "next": "^14",
     "pino-pretty": "^11.0.0",
@@ -18,7 +19,7 @@
     "react-dom": "^18.3.1",
     "react-hook-form": "^7.43.0",
     "react-hot-toast": "^2.4.0",
-    "thirdweb": "^5.16.0-nightly-5b0c37a0d9b7ba3d7f38647bb41463e91cc91a49-20240504030706"
+    "thirdweb": "^5.16.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.11",

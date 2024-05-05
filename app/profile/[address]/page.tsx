@@ -9,7 +9,7 @@ import React, { useState } from "react";
 import Container from "../../../components/Container/Container";
 import ListingWrapper from "../../../components/ListingGrid/ListingGrid";
 import NFTGrid from "../../../components/NFT/NFTGrid";
-import Skeleton from "../../../components/Skeleton/Skeleton";
+import Skeleton from "../../../components/Skeleton";
 import styles from "../../styles/Profile.module.css";
 import randomColor from "../../../util/randomColor";
 

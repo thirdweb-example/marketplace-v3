@@ -1,9 +1,11 @@
+"use client";
 import { ThirdwebProvider } from "thirdweb/react";
 import { Navbar } from "@/components/Navbar/Navbar";
 // import NextNProgress from "nextjs-progressbar";
 import { NETWORK } from "@/const/contracts";
 import "@/globals.css";
 import Image from "next/image";
+import { Toaster } from "react-hot-toast";
 
 export default function RootLayout({
 	// Layouts must accept a children prop.
@@ -14,8 +16,8 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en">
-			<body className="max-w-screen relative overflow-x-hidden">
-				<div className="absolute -z-10 w-screen h-screen left-0 right-0 top-0">
+			<body className="relative overflow-x-hidden max-w-screen">
+				<div className="absolute top-0 left-0 right-0 w-screen h-screen -z-10">
 					<Image
 						src="/hero-gradient.png"
 						width={1390}
@@ -25,6 +27,7 @@ export default function RootLayout({
 						className="w-full h-full opacity-75"
 					/>
 				</div>
+				<Toaster />
 				<ThirdwebProvider>
 					{/* <NextNProgress
         color="var(--color-tertiary)"
@@ -34,8 +37,8 @@ export default function RootLayout({
         showOnShallow={true}
       /> */}
 					<Navbar />
-					<div className="min-h-screen w-screen">
-						<div className="max-w-7xl px-4 mt-32 mx-auto">
+					<div className="w-screen min-h-screen">
+						<div className="px-8 mx-auto mt-32 max-w-7xl">
 							{children}
 						</div>
 					</div>

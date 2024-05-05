@@ -20,7 +20,7 @@ import {
 import styles from "../../../styles/Token.module.css";
 import Link from "next/link";
 import randomColor from "../../../../util/randomColor";
-import Skeleton from "../../../../components/Skeleton/Skeleton";
+import Skeleton from "../../../../components/Skeleton";
 import toast, { Toaster } from "react-hot-toast";
 import toastStyle from "../../../../util/toastConfig";
 

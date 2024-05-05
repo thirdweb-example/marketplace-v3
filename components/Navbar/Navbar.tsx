@@ -3,6 +3,7 @@ import { ConnectButton, useActiveAccount } from "thirdweb/react";
 import Image from "next/image";
 import Link from "next/link";
 import client from "@/lib/client";
+import { NETWORK } from "@/const/contracts";
 
 /**
  * Navigation bar that shows up on all pages.
@@ -12,8 +13,8 @@ export function Navbar() {
 	const account = useActiveAccount();
 
 	return (
-		<div className="fixed w-full top-0 flex items-center text-white/60 justify-center bg-transparent backdrop-blur-md z-10">
-			<nav className="px-4 py-5 w-full mx-auto max-w-7xl items-center justify-between flex">
+		<div className="fixed top-0 z-10 flex items-center justify-center w-full bg-transparent text-white/60 backdrop-blur-md">
+			<nav className="flex items-center justify-between w-full px-8 py-5 mx-auto max-w-7xl">
 				<div className="flex items-center gap-3">
 					<Link href="/" className="mr-4">
 						<Image
@@ -27,30 +28,34 @@ export function Navbar() {
 					<div className="flex items-center gap-6 font-medium">
 						<Link
 							href="/buy"
-							className="hover:text-white/100 transition"
+							className="transition hover:text-white/100"
 						>
 							Buy
 						</Link>
 						<Link
 							href="/sell"
-							className="hover:text-white/100 transition"
+							className="transition hover:text-white/100"
 						>
 							Sell
 						</Link>
 					</div>
 				</div>
 
-				<div className="flex items-center gap-4 justify-center">
+				<div className="flex items-center justify-center gap-4">
 					<div className="">
-						<ConnectButton theme="dark" client={client} />
+						<ConnectButton
+							theme="dark"
+							client={client}
+							chain={NETWORK}
+						/>
 					</div>
 					{account && (
 						<Link
-							className="hover:text-white/100 transition"
+							className="transition hover:text-white/100"
 							href={`/profile/${account.address}`}
 						>
 							<Image
-								className="cursor-pointer hover:opacity-80 transition mt-1.5"
+								className="transition cursor-pointer hover:opacity-80"
 								src="/user-icon.png"
 								width={42}
 								height={42}
