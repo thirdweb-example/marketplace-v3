@@ -41,7 +41,6 @@ export default function DirectListingButton({
 				});
 			}}
 			onTransactionConfirmed={(txResult) => {
-				console.log(txResult);
 				toast("Listed Successfully!", {
 					icon: "🥳",
 					id: "direct",
