@@ -8,15 +8,14 @@ export default function Events({ tokenId }: { tokenId: bigint }) {
 	const { data: transferEvents } = useContractEvents({
 		contract: NFT_COLLECTION,
 		events: [transferEvent({ tokenId })],
-		blockRange: 10000000,
 	});
 
 	return (
-		<div className="flex flex-wrap gap-4 mt-3">
+		<div className="flex flex-col flex-wrap gap-4 mt-3 divide-y">
 			{transferEvents?.map((event, index) => (
 				<div
 					key={event.transactionHash}
-					className="flex justify-between items-center flex-1 gap-1 border-white/20 py-2 min-w-[128px] rounded-lg min-h-[32px]"
+					className="flex justify-between items-center flex-1 gap-1 border-white/20 py-2 min-w-[128px] min-h-[32px]"
 				>
 					<div className="flex flex-col gap-1">
 						<p className="text-white/60">Event</p>
