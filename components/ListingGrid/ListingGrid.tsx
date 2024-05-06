@@ -14,9 +14,6 @@ type Props = {
 	emptyText: string;
 };
 
-/**
- * Accepts a listing and renders the associated NFT for it
- */
 export default async function ListingGrid(props: Props) {
   const listingsPromise = getAllValidListings({
     contract: MARKETPLACE,
