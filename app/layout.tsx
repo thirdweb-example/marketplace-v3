@@ -1,11 +1,15 @@
 import { ThirdwebProvider } from "thirdweb/react";
-import { Navbar } from "@/components/Navbar";
-// import NextNProgress from "nextjs-progressbar";
-import { NETWORK } from "@/const/contracts";
-import "@/globals.css";
-import Image from "next/image";
 import { Toaster } from "react-hot-toast";
-import client from "@/lib/client";
+import { Navbar } from "@/components/Navbar";
+import Image from "next/image";
+import "@/globals.css";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+	title: "thirdweb Marketplace Template",
+	description:
+		"Create an NFT marketplace on top of your NFT collection on any EVM-compatible blockchain.",
+};
 
 export default function RootLayout({
 	children,
@@ -28,13 +32,6 @@ export default function RootLayout({
 
 				<Toaster />
 				<ThirdwebProvider>
-					{/* <NextNProgress
-        color="var(--color-tertiary)"
-        startPosition={0.3}
-        stopDelayMs={200}
-        height={3}
-        showOnShallow={true}
-      /> */}
 					<Navbar />
 					<div className="w-screen min-h-screen">
 						<div className="px-8 mx-auto mt-32 max-w-7xl">
