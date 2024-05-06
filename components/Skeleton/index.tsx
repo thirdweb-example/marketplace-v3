@@ -7,14 +7,14 @@ type Props = {
 };
 
 export default function Skeleton({ height, width }: Props) {
-	return (
-		<div
-			style={{
-				width,
-				height,
-				borderRadius: "inherit",
-			}}
-			className={styles.skeleton}
-		/>
-	);
+  return (
+    <div
+      style={{
+        width,
+        height,
+        borderRadius: "inherit",
+      }}
+      className={styles.skeleton}
+    />
+  );
 }
