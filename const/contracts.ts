@@ -4,7 +4,7 @@ import client from "@/lib/client";
 // 1. Set up the network your smart contracts are deployed to.
 // First, import the chain from the package, then set the NETWORK variable to the chain.
 import { getContract } from "thirdweb";
-import { anvil } from "thirdweb/chains";
+import { anvil, sepolia } from "thirdweb/chains";
 export const NETWORK = anvil;
 
 // 2. The address of the marketplace V3 smart contract.
@@ -26,4 +26,4 @@ export const NFT_COLLECTION = getContract({
 
 // (Optional) Set up the URL of where users can view transactions on
 // For example, below, we use Mumbai.polygonscan to view transactions on the Mumbai testnet.
-export const ETHERSCAN_URL = "https://mumbai.polygonscan.com";
+export const ETHERSCAN_URL = "https://sepolia.etherscan.io/tx/";

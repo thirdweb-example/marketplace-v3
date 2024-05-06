@@ -1,15 +1,13 @@
-"use client";
 import { ThirdwebProvider } from "thirdweb/react";
-import { Navbar } from "@/components/Navbar/Navbar";
+import { Navbar } from "@/components/Navbar";
 // import NextNProgress from "nextjs-progressbar";
 import { NETWORK } from "@/const/contracts";
 import "@/globals.css";
 import Image from "next/image";
 import { Toaster } from "react-hot-toast";
+import client from "@/lib/client";
 
 export default function RootLayout({
-	// Layouts must accept a children prop.
-	// This will be populated with nested layouts or pages
 	children,
 }: {
 	children: React.ReactNode;
@@ -27,6 +25,7 @@ export default function RootLayout({
 						className="w-full h-full opacity-75"
 					/>
 				</div>
+
 				<Toaster />
 				<ThirdwebProvider>
 					{/* <NextNProgress

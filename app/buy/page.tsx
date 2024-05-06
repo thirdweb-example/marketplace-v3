@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import React, { Suspense } from "react";
 import { NFTGridLoading } from "@/components/NFT/NFTGrid";
 import ListingGrid from "@/components/ListingGrid/ListingGrid";

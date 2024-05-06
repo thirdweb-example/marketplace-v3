@@ -1,17 +1,10 @@
-"use client";
-import { ConnectButton, useActiveAccount } from "thirdweb/react";
+import { ConnectButton } from "thirdweb/react";
 import Image from "next/image";
 import Link from "next/link";
 import client from "@/lib/client";
 import { NETWORK } from "@/const/contracts";
 
-/**
- * Navigation bar that shows up on all pages.
- * Rendered in _app.tsx file above the page content.
- */
 export function Navbar() {
-	const account = useActiveAccount();
-
 	return (
 		<div className="fixed top-0 z-10 flex items-center justify-center w-full bg-transparent text-white/60 backdrop-blur-md">
 			<nav className="flex items-center justify-between w-full px-8 py-5 mx-auto max-w-7xl">
@@ -49,20 +42,6 @@ export function Navbar() {
 							chain={NETWORK}
 						/>
 					</div>
-					{account && (
-						<Link
-							className="transition hover:text-white/100"
-							href={`/profile/${account.address}`}
-						>
-							<Image
-								className="transition cursor-pointer hover:opacity-80"
-								src="/user-icon.png"
-								width={42}
-								height={42}
-								alt="Profile"
-							/>
-						</Link>
-					)}
 				</div>
 			</nav>
 		</div>

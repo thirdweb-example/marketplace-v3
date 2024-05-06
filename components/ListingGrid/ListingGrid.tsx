@@ -1,9 +1,6 @@
 import {
-	getAllListings,
 	getAllValidAuctions,
 	getAllValidListings,
-	totalAuctions,
-	totalListings,
 } from "thirdweb/extensions/marketplace";
 import { NFT as NFTType, ThirdwebContract } from "thirdweb";
 import React, { Suspense } from "react";
@@ -21,27 +18,11 @@ type Props = {
  * Accepts a listing and renders the associated NFT for it
  */
 export default async function ListingGrid(props: Props) {
-	const listingsCountPromise = totalListings({
-		contract: MARKETPLACE,
-	});
-	const auctionsCountPromise = totalAuctions({
-		contract: MARKETPLACE,
-	});
-
-	const [listingsCount, auctionsCount] = await Promise.all([
-		listingsCountPromise,
-		auctionsCountPromise,
-	]);
-
 	const listingsPromise = getAllValidListings({
 		contract: MARKETPLACE,
-		start: 0,
-		count: listingsCount,
 	});
 	const auctionsPromise = getAllValidAuctions({
 		contract: MARKETPLACE,
-		start: 0,
-		count: auctionsCount,
 	});
 
 	const [listings, auctions] = await Promise.all([

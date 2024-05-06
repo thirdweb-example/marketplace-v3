@@ -22,7 +22,7 @@ export default function ApprovalButton() {
 				});
 			}}
 			onError={(error) => {
-				toast(`Listed Failed! Reason: ${error.cause}`, {
+				toast(`Approval Failed!`, {
 					icon: "❌",
 					id: "approve",
 					style: toastStyle,

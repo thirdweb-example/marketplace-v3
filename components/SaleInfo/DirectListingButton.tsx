@@ -33,7 +33,7 @@ export default function DirectListingButton({
 				});
 			}}
 			onError={(error) => {
-				toast(`Listed Failed! Reason: ${error.cause}`, {
+				toast(`Listed Failed!`, {
 					icon: "❌",
 					id: "direct",
 					style: toastStyle,
@@ -41,13 +41,16 @@ export default function DirectListingButton({
 				});
 			}}
 			onTransactionConfirmed={(txResult) => {
+				console.log(txResult);
 				toast("Listed Successfully!", {
 					icon: "🥳",
 					id: "direct",
 					style: toastStyle,
 					position: "bottom-center",
 				});
-				router.push(`/token/${NFT_COLLECTION.address}/${nft.id}`);
+				router.push(
+					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
+				);
 			}}
 		>
 			List for Sale

@@ -19,16 +19,13 @@ const INPUT_STYLES =
 const LEGEND_STYLES = "mb-2 text-white/80";
 export default function SaleInfo({ nft }: Props) {
 	const account = useActiveAccount();
-
-	// Manage form submission state using tabs and conditional rendering
 	const [tab, setTab] = useState<"direct" | "auction">("direct");
 
-	// const { data: hasApproval } = useReadContract(isApprovedForAll, {
-	// 	contract: NFT_COLLECTION,
-	// 	owner: account?.address || ADDRESS_ZERO,
-	// 	operator: MARKETPLACE.address,
-	// });
-	const hasApproval = false;
+	const { data: hasApproval } = useReadContract(isApprovedForAll, {
+		contract: NFT_COLLECTION,
+		owner: account?.address || ADDRESS_ZERO,
+		operator: MARKETPLACE.address,
+	});
 
 	const [directListingState, setDirectListingState] = useState({
 		price: "0",
@@ -85,7 +82,7 @@ export default function SaleInfo({ nft }: Props) {
 							setDirectListingState({ price: e.target.value })
 						}
 					/>
-					{hasApproval ? (
+					{!hasApproval ? (
 						<ApprovalButton />
 					) : (
 						<DirectListingButton
@@ -136,7 +133,7 @@ export default function SaleInfo({ nft }: Props) {
 						}
 					/>
 
-					{hasApproval ? (
+					{!hasApproval ? (
 						<ApprovalButton />
 					) : (
 						<AuctionListingButton

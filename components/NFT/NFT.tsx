@@ -3,12 +3,11 @@ import React, { useEffect, useState } from "react";
 import { NFT } from "thirdweb";
 import { NFT_COLLECTION } from "../../const/contracts";
 import { DirectListing, EnglishAuction } from "thirdweb/extensions/marketplace";
-import { download } from "thirdweb/storage";
+import { MediaRenderer } from "thirdweb/react";
 import { getNFT } from "thirdweb/extensions/erc721";
 import client from "@/lib/client";
-import Link from "next/link";
-import Image from "next/image";
 import Skeleton from "@/components/Skeleton";
+import { useRouter } from "next/navigation";
 
 type Props = {
 	tokenId: bigint;
@@ -25,63 +24,44 @@ export default function NFTComponent({
 	overrideOnclickBehavior,
 	...props
 }: Props) {
-	const [loading, setLoading] = useState(false);
+	const router = useRouter();
 	const [nft, setNFT] = useState(props.nft);
-	const [image, setImage] = useState<string | undefined>();
 
 	useEffect(() => {
 		if (nft?.id !== tokenId) {
-			setLoading(true);
 			getNFT({
 				contract: NFT_COLLECTION,
 				tokenId: tokenId,
 				includeOwner: true,
-			})
-				.then((nft) => {
-					setNFT(nft);
-				})
-				.finally(() => setLoading(false));
+			}).then((nft) => {
+				setNFT(nft);
+			});
 		}
 	}, [tokenId, nft?.id]);
 
-	useEffect(() => {
-		if (nft) {
-			setLoading(true);
-			download({
-				client,
-				uri: nft.metadata.image || "",
-			})
-				.then((res) => {
-					if (res.ok) setImage(res.url);
-				})
-				.finally(() => setLoading(false));
-		}
-	}, [nft]);
-
-	if (loading || !nft) {
+	if (!nft) {
 		return <LoadingNFTComponent />;
 	}
 
 	return (
-		<Link
-			href={
-				overrideOnclickBehavior
-					? "#"
-					: `/token/${NFT_COLLECTION.address}/${tokenId}`
-			}
-			className="transition-all hover:scale-105 hover:shadow-lg flex flex-col w-full h-[350px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
+		<div
+			className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg flex flex-col w-full h-[350px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
 			onClick={
 				overrideOnclickBehavior
 					? () => overrideOnclickBehavior(nft!)
-					: undefined
+					: () =>
+							router.push(
+								`/token/${
+									NFT_COLLECTION.address
+								}/${tokenId.toString()}`
+							)
 			}
 		>
 			<div className="relative w-full h-64 bg-white/[.04]">
-				{image && (
-					<Image
-						src={image}
-						alt={nft.metadata.name || ""}
-						fill
+				{nft.metadata.image && (
+					<MediaRenderer
+						src={nft.metadata.image}
+						client={client}
 						className="object-cover object-center"
 					/>
 				)}
@@ -109,7 +89,7 @@ export default function NFTComponent({
 					</div>
 				)}
 			</div>
-		</Link>
+		</div>
 	);
 }
 

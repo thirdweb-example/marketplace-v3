@@ -36,7 +36,7 @@ export default function AuctionListingButton({
 				});
 			}}
 			onError={(error) => {
-				toast(`Listed Failed! Reason: ${error.cause}`, {
+				toast(`Listed Failed!`, {
 					icon: "❌",
 					id: "auction",
 					style: toastStyle,
@@ -51,7 +51,7 @@ export default function AuctionListingButton({
 					position: "bottom-center",
 				});
 				router.push(
-					`/token/${NFT_COLLECTION.address}/${nft.metadata.id}`
+					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
 				);
 			}}
 		>
