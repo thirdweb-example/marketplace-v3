@@ -66,14 +66,6 @@ export default function BuyListingButton({
 					style: toastStyle,
 					position: "bottom-center",
 				});
-				revalidatePath(
-					`/token/${NFT_COLLECTION.address}/${
-						directListing?.tokenId.toString() ||
-						auctionListing?.tokenId.toString()
-					}`
-				);
-				revalidatePath(`/sell`);
-				revalidatePath(`/buy`);
 			}}
 		>
 			Buy Now

@@ -54,10 +54,6 @@ export default function AuctionListingButton({
 				router.push(
 					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
 				);
-				revalidatePath(
-					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
-				);
-				revalidatePath(`/buy`);
 			}}
 		>
 			List for Auction
