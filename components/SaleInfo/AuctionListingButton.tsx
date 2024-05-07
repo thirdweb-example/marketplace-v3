@@ -6,6 +6,7 @@ import { createAuction } from "thirdweb/extensions/marketplace";
 import { MARKETPLACE, NFT_COLLECTION } from "@/const/contracts";
 import toastStyle from "@/util/toastConfig";
 import toast from "react-hot-toast";
+import { revalidatePath } from "next/cache";
 
 export default function AuctionListingButton({
 	nft,
@@ -53,6 +54,10 @@ export default function AuctionListingButton({
 				router.push(
 					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
 				);
+				revalidatePath(
+					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
+				);
+				revalidatePath(`/buy`);
 			}}
 		>
 			List for Auction

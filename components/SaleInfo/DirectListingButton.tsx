@@ -6,6 +6,7 @@ import { createListing } from "thirdweb/extensions/marketplace";
 import toast from "react-hot-toast";
 import { MARKETPLACE, NFT_COLLECTION } from "@/const/contracts";
 import toastStyle from "@/util/toastConfig";
+import { revalidatePath } from "next/cache";
 
 export default function DirectListingButton({
 	nft,
@@ -50,6 +51,10 @@ export default function DirectListingButton({
 				router.push(
 					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
 				);
+				revalidatePath(
+					`/token/${NFT_COLLECTION.address}/${nft.id.toString()}`
+				);
+				revalidatePath(`/buy`);
 			}}
 		>
 			List for Sale
