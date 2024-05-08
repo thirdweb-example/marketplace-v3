@@ -1,81 +1,102 @@
-import {
-  ThirdwebNftMedia,
-  useContract,
-  useValidDirectListings,
-  useValidEnglishAuctions,
-} from "@thirdweb-dev/react";
-import { NFT } from "@thirdweb-dev/sdk";
-import React from "react";
-import {
-  MARKETPLACE_ADDRESS,
-  NFT_COLLECTION_ADDRESS,
-} from "../../const/contractAddresses";
-import Skeleton from "../Skeleton/Skeleton";
-import styles from "./NFT.module.css";
+"use client";
+import React, { useEffect, useState } from "react";
+import { NFT } from "thirdweb";
+import { NFT_COLLECTION } from "../../const/contracts";
+import { DirectListing, EnglishAuction } from "thirdweb/extensions/marketplace";
+import { MediaRenderer } from "thirdweb/react";
+import { getNFT } from "thirdweb/extensions/erc721";
+import client from "@/lib/client";
+import Skeleton from "@/components/Skeleton";
+import { useRouter } from "next/navigation";
 
 type Props = {
-  nft: NFT;
+	tokenId: bigint;
+	nft?: NFT;
+	directListing?: DirectListing;
+	auctionListing?: EnglishAuction;
+	overrideOnclickBehavior?: (nft: NFT) => void;
 };
 
-export default function NFTComponent({ nft }: Props) {
-  const { contract: marketplace, isLoading: loadingContract } = useContract(
-    MARKETPLACE_ADDRESS,
-    "marketplace-v3"
-  );
+export default function NFTComponent({
+  tokenId,
+  directListing,
+  auctionListing,
+  overrideOnclickBehavior,
+  ...props
+}: Props) {
+  const router = useRouter();
+  const [nft, setNFT] = useState(props.nft);
 
-  // 1. Load if the NFT is for direct listing
-  const { data: directListing, isLoading: loadingDirect } =
-    useValidDirectListings(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
+  useEffect(() => {
+    if (nft?.id !== tokenId) {
+      getNFT({
+        contract: NFT_COLLECTION,
+        tokenId: tokenId,
+        includeOwner: true,
+      }).then((nft) => {
+        setNFT(nft);
+      });
+    }
+  }, [tokenId, nft?.id]);
 
-  // 2. Load if the NFT is for auction
-  const { data: auctionListing, isLoading: loadingAuction } =
-    useValidEnglishAuctions(marketplace, {
-      tokenContract: NFT_COLLECTION_ADDRESS,
-      tokenId: nft.metadata.id,
-    });
+  if (!nft) {
+    return <LoadingNFTComponent />;
+  }
 
   return (
-    <>
-      <ThirdwebNftMedia metadata={nft.metadata} className={styles.nftImage} />
+    <div
+      className="cursor-pointer transition-all hover:scale-105 hover:shadow-lg flex flex-col w-full h-[350px] bg-white/[.04] justify-stretch border overflow-hidden border-white/10 rounded-lg"
+      onClick={
+        overrideOnclickBehavior
+          ? () => overrideOnclickBehavior(nft!)
+          : () =>
+            router.push(
+              `/token/${
+                NFT_COLLECTION.address
+              }/${tokenId.toString()}`
+            )
+      }
+    >
+      <div className="relative w-full h-64 bg-white/[.04]">
+        {nft.metadata.image && (
+          <MediaRenderer
+            src={nft.metadata.image}
+            client={client}
+            className="object-cover object-center"
+          />
+        )}
+      </div>
+      <div className="flex items-center justify-between flex-1 w-full px-3">
+        <div className="flex flex-col justify-center py-3">
+          <p className="max-w-full overflow-hidden text-lg text-white text-ellipsis whitespace-nowrap">
+            {nft.metadata.name}
+          </p>
+          <p className="text-sm font-semibold text-white/60">
+						#{nft.id.toString()}
+          </p>
+        </div>
 
-      <p className={styles.nftTokenId}>Token ID #{nft.metadata.id}</p>
-      <p className={styles.nftName}>{nft.metadata.name}</p>
-
-      <div className={styles.priceContainer}>
-        {loadingContract || loadingDirect || loadingAuction ? (
-          <Skeleton width="100%" height="100%" />
-        ) : directListing && directListing[0] ? (
-          <div className={styles.nftPriceContainer}>
-            <div>
-              <p className={styles.nftPriceLabel}>Price</p>
-              <p className={styles.nftPriceValue}>
-                {`${directListing[0]?.currencyValuePerToken.displayValue}
-          ${directListing[0]?.currencyValuePerToken.symbol}`}
-              </p>
-            </div>
-          </div>
-        ) : auctionListing && auctionListing[0] ? (
-          <div className={styles.nftPriceContainer}>
-            <div>
-              <p className={styles.nftPriceLabel}>Minimum Bid</p>
-              <p className={styles.nftPriceValue}>
-                {`${auctionListing[0]?.minimumBidCurrencyValue.displayValue}
-          ${auctionListing[0]?.minimumBidCurrencyValue.symbol}`}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <div className={styles.nftPriceContainer}>
-            <div>
-              <p className={styles.nftPriceLabel}>Price</p>
-              <p className={styles.nftPriceValue}>Not for sale</p>
-            </div>
+        {(directListing || auctionListing) && (
+          <div className="flex flex-col items-end justify-center">
+            <p className="max-w-full mb-1 overflow-hidden font-medium text-ellipsis whitespace-nowrap text-white/60">
+							Price
+            </p>
+            <p className="max-w-full overflow-hidden text-white text-ellipsis whitespace-nowrap">
+              {directListing
+                ? `${directListing?.currencyValuePerToken.displayValue}${directListing?.currencyValuePerToken.symbol}`
+                : `${auctionListing?.minimumBidCurrencyValue.displayValue}${auctionListing?.minimumBidCurrencyValue.symbol}`}
+            </p>
           </div>
         )}
       </div>
-    </>
+    </div>
+  );
+}
+
+export function LoadingNFTComponent() {
+  return (
+    <div className="w-full h-[350px] rounded-lg">
+      <Skeleton width="100%" height="100%" />
+    </div>
   );
 }
