@@ -26,10 +26,10 @@ Start the server
 
 ```bash
   # npm
-  npm run start
+  npm run dev
 
   # yarn
-  yarn start
+  yarn dev
 ```
 
 ## Environment Variables
