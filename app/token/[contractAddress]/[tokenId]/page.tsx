@@ -1,7 +1,7 @@
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 import React from "react";
-import { MediaRenderer } from "thirdweb/react";
+import MediaRenderer from "@/components/MediaRenderer";
 import {
 	getAllValidListings,
 	getAllValidAuctions,
@@ -54,11 +54,9 @@ export default async function TokenPage({
 	return (
 		<div className="flex flex-col max-w-2xl gap-16 mx-auto mt-32 lg:max-w-full lg:flex-row">
 			<div className="flex flex-col flex-1">
-				<MediaRenderer
-					src={nft.metadata.image}
-					client={client}
-					className="rounded-lg !w-full bg-white/[.04]"
-				/>
+				{nft.metadata.image && (
+					<MediaRenderer image={nft.metadata.image} />
+				)}
 				<div className="flex items-center justify-between my-4">
 					<div>
 						<h1 className="mx-4 text-3xl font-semibold break-words hyphens-auto">
