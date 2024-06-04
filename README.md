@@ -12,7 +12,7 @@ Create an NFT marketplace on top of your NFT collection on **any** EVM-compatibl
 Install via [thirdweb create](https://portal.thirdweb.com/cli/create)
 
 ```bash
-  npx thirdweb create --template marketplace-v3
+npx thirdweb create --template marketplace-v3
 ```
 
 ## Environment Variables
