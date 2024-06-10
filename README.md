@@ -1,3 +1,11 @@
+> [!Important]  
+> This repository is outdated and no longer maintained. But we have something better for you!
+>
+> Head over to this new repository: [marketplace-template](https://github.com/thirdweb-example/marketplace-template)
+> 
+> The new marketplace template now comes with support for multiple chains and collections
+> 
+
 # NFT Marketplace V3
 
 Create an NFT marketplace on top of your NFT collection on **any** EVM-compatible blockchain.
